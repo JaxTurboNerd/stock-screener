@@ -4,6 +4,14 @@ class StocksController < ApplicationController
   # GET /stocks or /stocks.json
   def index
     @stocks = Stock.all
+    service = FinanceApiService.new
+    @result = service.get_price("AAPL")
+
+    # if @result
+    #   render json: @result
+    # else
+    #   render json: { error: "Unable to fetch stock price for Apple" }, status: :bad_request
+    # end
   end
 
   # GET /stocks/1 or /stocks/1.json
@@ -58,13 +66,25 @@ class StocksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_stock
-      @stock = Stock.find(params.expect(:id))
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_stock
+    @stock = Stock.find(params.expect(:id))
+  end
 
-    # Only allow a list of trusted parameters through.
-    def stock_params
-      params.fetch(:stock, {})
+  # Only allow a list of trusted parameters through.
+  def stock_params
+    params.fetch(:stock, {})
+  end
+
+  # This function is used to get the AAPL stock.
+  def price
+    service = FinanceApiService.new
+    result = service.get_price("AAPL")
+
+    if result
+      render json: result
+    else
+      render json: { error: "Unable to fetch stock price for Apple" }, status: :bad_request
     end
+  end
 end
