@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Stocks" %>
+
+<p class='text-3xl'>Stocks:</p>
+
+<div> 
+    <% @stocks.each do |stock| %>
+      <p class='p-4 mb-2 bg-gray-200 border-2 border-black rounded-md'><%= stock.name %></p>
+    <% end %>
+</div>
