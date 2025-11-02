@@ -4,7 +4,7 @@ class FinanceApiService
 
   def initialize
     @headers = {
-      "x-rapidapi-key" => "e752b021f3msh2df98efe31171b5p1c8c0ajsnf5b9d468fad4", # <-- Store your key securely in .env or credentials
+      "x-rapidapi-key" => ENV.fetch("RAPIDAPI_KEY", Rails.application.credentials.dig(:rapidapi, :key)),
       "x-rapidapi-host" => "yahoo-finance166.p.rapidapi.com"
     }
   end
