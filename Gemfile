@@ -67,3 +67,4 @@ gem "tailwindcss-rails", "~> 4.4"
 gem "tailwindcss-ruby", "~> 4.1"
 
 gem "httparty", "~> 0.23.2"
+gem "dotenv-rails", groups: [:development, :test, :production]
