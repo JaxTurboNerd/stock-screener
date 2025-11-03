@@ -1,0 +1,67 @@
+  <section class='w-full p-3 border-2 rounded-sm' id='price-and-volume'>
+    <p class='text-2xl bg-gray-200 w-full p-1'>Price and Volume</p>
+    <div class='flex gap-4 items-center border-1 rounded-sm p-2' id='share-price'>
+      <p class='text-xl'>Share Price</p>
+      <input type='number' name='share-price' id='share-price' class='p-2 border rounded-sm'>
+    </div>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2' id='volume' id='price-performance'>
+      <p class='text-xl'>Price Performance vs Industry</p>
+      <div class='flex gap-4' id='price-performance'>
+        <style>
+          /* Embedded: style peer-checked for price-performance checkboxes */
+          input[type="checkbox"].price-performance-checkbox:checked + span {
+            @apply bg-gray-800 text-white border-gray-800;
+          }
+        </style>
+        <% [
+          ['< -40%', 'lt_40'],
+          ['-40 to -20%', 'minus_40_to_minus_20'],
+          ['-20 to 0%', 'minus_20_to_0'],
+          ['0 to 20%', 'zero_to_20'],
+          ['> 40%', 'gt_40']
+        ].each_with_index do |(label, value), i| %>
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+            <input type="checkbox"
+                   name="price_performance[]"
+                   value="<%= value %>"
+                   id="price-performance-<%= i %>"
+                   class="price-performance-checkbox sr-only"
+                   onchange="
+                    if (this.checked) {
+                      this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                    } else {
+                      this.parentElement.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                    }
+                   ">
+            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+    <div class='border-1 rounded-sm flex gap-4 p-2' id='beta-choices'>
+        <div class='flex justify-center gap-4 items-center' id='beta'><p class='text-xl'>Beta</p>
+            <% [
+              ['Less volatile than', 'less_volatile'],
+              ['More volatile than', 'more_volatile']
+            ].each_with_index do |(label, value), i| %>
+              <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+                <input type="radio"
+                      name="beta_comparison"
+                      value="<%= value %>"
+                      id="beta-<%= i %>"
+                      class="sr-only beta-comparison-radio"
+                      onchange="
+                        this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
+                          labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                        });
+                        if (this.checked) {
+                          this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                        }
+                      ">
+                <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+  </section>
+
