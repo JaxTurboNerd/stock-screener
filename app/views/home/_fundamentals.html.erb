@@ -233,38 +233,5 @@
         <% end %>
       </div>
     </div>
-
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='debt-capital-ratio'>
-      <p class='text-xl'>Debt/Capital Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          debt_capital_ratio_options = [
-            ['Less than 0.2', 'lt_0_2'],
-            ['0.2 - 0.5', '0_2_0_5'],
-            ['0.5 - 1.0', '0_5_1_0'],
-            ['More than 1.0', 'gt_1_0']
-          ]
-        %>
-        <% debt_capital_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
-            <input
-              type="radio"
-              name="debt_capital_ratio"
-              value="<%= value %>"
-              id="debt-capital-ratio-<%= i %>"
-              class="sr-only debt-capital-ratio-radio"
-              onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
-                });
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
   </section>
 
