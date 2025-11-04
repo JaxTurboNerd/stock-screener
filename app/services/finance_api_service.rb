@@ -21,7 +21,7 @@ class FinanceApiService
       data = response.parsed_response
       regular_market_price = data.dig("quoteSummary", "result", 0, "price", "regularMarketPrice", "raw")
       if regular_market_price
-        puts "Current Regular Market Price for #{symbol.upcase} (#{region}): $#{regular_market_price}"
+        # puts "Current Regular Market Price for #{symbol.upcase} (#{region}): $#{regular_market_price}"
         regular_market_price
       else
         puts "Price not found in response."

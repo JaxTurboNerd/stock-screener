@@ -5,7 +5,7 @@ class StocksController < ApplicationController
   def index
     @stocks = Stock.all
     service = FinanceApiService.new
-    @result = service.get_price("AAPL")
+    # @result = service.get_price("AAPL")
 
     # if @result
     #   render json: @result
