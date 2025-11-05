@@ -14,17 +14,16 @@
         <% current_ratio_options.each_with_index do |(label, value), i| %>
           <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
-              type="radio"
-              name="current_ratio"
+              type="checkbox"
+              name="current_ratio[]"
               value="<%= value %>"
               id="current-ratio-<%= i %>"
-              class="sr-only current-ratio-radio"
+              class="sr-only current-ratio-checkbox"
               onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                });
                 if (this.checked) {
                   this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                } else {
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -46,17 +45,16 @@
         <% debt_ratio_options.each_with_index do |(label, value), i| %>
           <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
-              type="radio"
-              name="debt_ratio"
+              type="checkbox"
+              name="debt_ratio[]"
               value="<%= value %>"
               id="debt-ratio-<%= i %>"
-              class="sr-only debt-ratio-radio"
+              class="sr-only debt-ratio-checkbox"
               onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                });
                 if (this.checked) {
                   this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                } else {
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -78,17 +76,16 @@
         <% debt_equity_ratio_options.each_with_index do |(label, value), i| %>
           <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
-              type="radio"
-              name="debt_equity_ratio"
+              type="checkbox"
+              name="debt_equity_ratio[]"
               value="<%= value %>"
               id="debt-equity-ratio-<%= i %>"
-              class="sr-only debt-equity-ratio-radio"
+              class="sr-only debt-equity-ratio-checkbox"
               onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                });
                 if (this.checked) {
                   this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                } else {
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -110,17 +107,16 @@
         <% debt_capital_ratio_options.each_with_index do |(label, value), i| %>
           <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
-              type="radio"
-              name="debt_capital_ratio"
+              type="checkbox"
+              name="debt_capital_ratio[]"
               value="<%= value %>"
               id="debt-capital-ratio-<%= i %>"
-              class="sr-only debt-capital-ratio-radio"
+              class="sr-only debt-capital-ratio-checkbox"
               onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                });
                 if (this.checked) {
                   this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                } else {
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -142,17 +138,16 @@
         <% interest_coverage_ratio_options.each_with_index do |(label, value), i| %>
           <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
-              type="radio"
-              name="interest_coverage_ratio"
+              type="checkbox"
+              name="interest_coverage_ratio[]"
               value="<%= value %>"
               id="interest-coverage-ratio-<%= i %>"
-              class="sr-only interest-coverage-ratio-radio"
+              class="sr-only interest-coverage-ratio-checkbox"
               onchange="
-                this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                });
                 if (this.checked) {
                   this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                } else {
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
