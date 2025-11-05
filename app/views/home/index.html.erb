@@ -1,5 +1,5 @@
-<div class='flex flex-col items-center h-screen w-full p-5'>
-  <p class='text-4xl'>Stock Screener</p>
+<div class='flex flex-col items-center h-screen w-full p-5 bg-white dark:bg-gray-900'>
+  <p class='text-4xl text-gray-900 dark:text-white'>Stock Screener</p>
   <%= form_with url: search_stocks_path, method: :post, id: 'stock-screener-form', class: 'w-full', data: { turbo: false } do |form| %>
     <%= render 'market_segment' %>
     <%= render 'price_and_volume' %>
@@ -8,7 +8,7 @@
     <%= render 'debt' %>
     <%= render 'opinion' %>
     <div class='flex justify-center mt-6 mb-4'>
-      <%= form.submit 'Search Stocks', class: 'px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold cursor-pointer' %>
+      <%= form.submit 'Search Stocks', class: 'px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-lg font-semibold cursor-pointer' %>
     </div>
   <% end %>
 </div>

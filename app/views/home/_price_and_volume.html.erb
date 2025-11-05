@@ -1,16 +1,25 @@
-  <section class='w-full p-3 border-2 rounded-sm' id='price-and-volume'>
-    <p class='text-2xl bg-gray-200 w-full p-1'>Price and Volume</p>
-    <div class='flex gap-4 items-center border-1 rounded-sm p-2' id='share-price'>
-      <p class='text-xl'>Share Price</p>
-      <input type='number' name='share-price' id='share-price' class='p-2 border rounded-sm'>
+  <section class='w-full p-3 border-2 rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700' id='price-and-volume'>
+    <p class='text-2xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white w-full p-1'>Price and Volume</p>
+    <div class='flex gap-4 items-center border-1 rounded-sm p-2 border-gray-300 dark:border-gray-600' id='share-price'>
+      <p class='text-xl text-gray-900 dark:text-white'>Share Price</p>
+      <div class='flex gap-4 items-center'>
+        <label class='flex items-center gap-2'>
+          <span class='text-gray-900 dark:text-white'>greater than $:</span>
+          <input type='number' step='0.01' name='share_price_greater_than' id='share-price-greater-than' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'>
+        </label>
+        <label class='flex items-center gap-2'>
+          <span class='text-gray-900 dark:text-white'>and less than $</span>
+          <input type='number' step='0.01' name='share_price_less_than' id='share-price-less-than' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'>
+        </label>
+      </div>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2' id='volume' id='price-performance'>
-      <p class='text-xl'>Price Performance vs Industry</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 border-gray-300 dark:border-gray-600' id='volume' id='price-performance'>
+      <p class='text-xl text-gray-900 dark:text-white'>Price Performance vs Industry</p>
       <div class='flex gap-4' id='price-performance'>
         <style>
           /* Embedded: style peer-checked for price-performance checkboxes */
           input[type="checkbox"].price-performance-checkbox:checked + span {
-            @apply bg-gray-800 text-white border-gray-800;
+            @apply bg-gray-800 dark:bg-blue-600 text-white border-gray-800 dark:border-blue-600;
           }
         </style>
         <% [
@@ -20,7 +29,7 @@
           ['0 to 20%', 'zero_to_20'],
           ['> 40%', 'gt_40']
         ].each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input type="checkbox"
                    name="price_performance[]"
                    value="<%= value %>"
@@ -28,9 +37,9 @@
                    class="price-performance-checkbox sr-only"
                    onchange="
                     if (this.checked) {
-                      this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                      this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                     } else {
-                      this.parentElement.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                      this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                     }
                    ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -38,13 +47,13 @@
         <% end %>
       </div>
     </div>
-    <div class='border-1 rounded-sm flex gap-4 p-2' id='beta-choices'>
-        <div class='flex justify-center gap-4 items-center' id='beta'><p class='text-xl'>Beta</p>
+    <div class='border-1 rounded-sm flex gap-4 p-2 border-gray-300 dark:border-gray-600' id='beta-choices'>
+        <div class='flex justify-center gap-4 items-center' id='beta'><p class='text-xl text-gray-900 dark:text-white'>Beta</p>
             <% [
               ['Less volatile than', 'less_volatile'],
               ['More volatile than', 'more_volatile']
             ].each_with_index do |(label, value), i| %>
-              <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+              <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
                 <input type="radio"
                       name="beta_comparison"
                       value="<%= value %>"
@@ -52,10 +61,10 @@
                       class="sr-only beta-comparison-radio"
                       onchange="
                         this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                          labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                          labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                         });
                         if (this.checked) {
-                          this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                          this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                         }
                       ">
                 <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>

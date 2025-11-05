@@ -1,8 +1,8 @@
-  <section class='w-full p-3 border-2 rounded-sm' id='market-segment'>
-    <p class='text-2xl bg-gray-200 w-full p-1'>Market Segment</p>
-    <div class='flex gap-4 items-center border-1 rounded-sm p-2' id='sector-industry'>
-      <p class='text-xl'>Sector/Industry</p>
-      <select name='sector' id='sector' class='p-2 border rounded-sm'>
+  <section class='w-full p-3 border-2 rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700' id='market-segment'>
+    <p class='text-2xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white w-full p-1'>Market Segment</p>
+    <div class='flex gap-4 items-center border-1 rounded-sm p-2 border-gray-300 dark:border-gray-600' id='sector-industry'>
+      <p class='text-xl text-gray-900 dark:text-white'>Sector/Industry</p>
+      <select name='sector' id='sector' class='p-2 border rounded-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600'>
         <option value=''>Select sector</option>
         <option value='basic-materials'>Basic Materials</option>
         <option value='consumer-discretionary'>Consumer Discretionary</option>
@@ -16,17 +16,17 @@
         <option value='utilities'>Utilities</option>
       </select>
     </div>
-    <div class='flex gap-4 items-center border-1 rounded-sm p-2'>
-      <p class='text-xl'>Market Cap</p>
+    <div class='flex gap-4 items-center border-1 rounded-sm p-2 border-gray-300 dark:border-gray-600'>
+      <p class='text-xl text-gray-900 dark:text-white'>Market Cap</p>
       <div class='flex justify-center gap-4' id='market-cap'>
       <style>
         /* Embedded for view file: Style peer-checked on label */
         input[type="checkbox"].market-cap-checkbox:checked + span {
-          @apply bg-gray-800 text-white border-gray-800;
+          @apply bg-gray-800 dark:bg-blue-600 text-white border-gray-800 dark:border-blue-600;
         }
       </style>
       <% ['Micro Cap', 'Small Cap', 'Mid Cap', 'Large Cap', 'Mega Cap'].each_with_index do |label, i| %>
-        <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+        <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
           <input type="checkbox"
                  name="market_cap[]"
                  value="<%= label.parameterize.underscore %>"
@@ -34,9 +34,9 @@
                  class="market-cap-checkbox sr-only"
                  onchange="
                   if (this.checked) {
-                    this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                   } else {
-                    this.parentElement.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                   }
                  ">
           <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>

@@ -1,7 +1,7 @@
-  <section class='w-full p-3 border-2 rounded-sm' id='fundamentals'>
-    <p class='text-2xl bg-gray-200 w-full p-1'>Fundamentals</p>
-    <div class=' flex border-1 rounded-sm items-center gap-4 p-2' id='pe-ratio'>
-      <p class='text-xl'>PE Ratio</p>
+  <section class='w-full p-3 border-2 rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700' id='fundamentals'>
+    <p class='text-2xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white w-full p-1'>Fundamentals</p>
+    <div class=' flex border-1 rounded-sm items-center gap-4 p-2 border-gray-300 dark:border-gray-600' id='pe-ratio'>
+      <p class='text-xl text-gray-900 dark:text-white'>PE Ratio</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           pe_ratio_options = [
@@ -12,7 +12,7 @@
           ]
         %>
         <% pe_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="checkbox"
               name="pe_ratio[]"
@@ -21,9 +21,9 @@
               class="sr-only pe-ratio-checkbox"
               onchange="
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 } else {
-                  this.parentElement.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -31,8 +31,8 @@
         <% end %>
       </div>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='peg-ratio'>
-      <p class='text-xl'>PEG Ratio</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='peg-ratio'>
+      <p class='text-xl text-gray-900 dark:text-white'>PEG Ratio</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           peg_ratio_options = [
@@ -44,7 +44,7 @@
           ]
         %>
         <% peg_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="peg_ratio"
@@ -53,10 +53,10 @@
               class="sr-only peg-ratio-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -64,8 +64,8 @@
         <% end %>
       </div>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='profit-margin'>
-      <p class='text-xl'>Profit Margin</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='profit-margin'>
+      <p class='text-xl text-gray-900 dark:text-white'>Profit Margin</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           profit_margin_options = [
@@ -77,7 +77,7 @@
           ]
         %>
         <% profit_margin_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="profit_margin"
@@ -86,10 +86,10 @@
               class="sr-only profit-margin-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -98,8 +98,8 @@
       </div>
     </div>
 
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='price-sales-ratio'>
-      <p class='text-xl'>Price/Sales Ratio</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='price-sales-ratio'>
+      <p class='text-xl text-gray-900 dark:text-white'>Price/Sales Ratio</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           price_sales_ratio_options = [
@@ -111,7 +111,7 @@
           ]
         %>
         <% price_sales_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="price_sales_ratio"
@@ -120,10 +120,10 @@
               class="sr-only price-sales-ratio-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -132,8 +132,8 @@
       </div>
     </div>
 
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='price-book-ratio'>
-      <p class='text-xl'>Price/Book Ratio</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='price-book-ratio'>
+      <p class='text-xl text-gray-900 dark:text-white'>Price/Book Ratio</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           price_book_ratio_options = [
@@ -145,7 +145,7 @@
           ]
         %>
         <% price_book_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="price_book_ratio"
@@ -154,10 +154,10 @@
               class="sr-only price-book-ratio-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -166,8 +166,8 @@
       </div>
     </div>
 
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='price-cash-flow'>
-      <p class='text-xl'>Price/Cash Flow</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='price-cash-flow'>
+      <p class='text-xl text-gray-900 dark:text-white'>Price/Cash Flow</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           price_cash_flow_options = [
@@ -179,7 +179,7 @@
           ]
         %>
         <% price_cash_flow_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="price_cash_flow"
@@ -188,10 +188,10 @@
               class="sr-only price-cash-flow-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
@@ -200,8 +200,8 @@
       </div>
     </div>
 
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4' id='return-on-equity'>
-      <p class='text-xl'>Return on Equity</p>
+    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='return-on-equity'>
+      <p class='text-xl text-gray-900 dark:text-white'>Return on Equity</p>
       <div class='flex flex-wrap gap-2 mt-2'>
         <%
           return_on_equity_options = [
@@ -213,7 +213,7 @@
           ]
         %>
         <% return_on_equity_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white text-gray-700 border-gray-300 hover:bg-gray-100 mr-2">
+          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
             <input
               type="radio"
               name="return_on_equity"
@@ -222,10 +222,10 @@
               class="sr-only return-on-equity-radio"
               onchange="
                 this.parentElement.parentElement.querySelectorAll('label').forEach(labelEl => {
-                  labelEl.classList.remove('!bg-gray-800', '!text-white', '!border-gray-800');
+                  labelEl.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 });
                 if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', '!text-white', '!border-gray-800');
+                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
                 }
               ">
             <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>

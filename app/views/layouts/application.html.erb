@@ -23,10 +23,10 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-screen overflow-hidden">
+  <body class="h-screen overflow-hidden bg-white dark:bg-gray-900">
     <div class='flex h-full'>
       <%= render partial: "shared/navbar" %>
-      <div class="flex-1 overflow-y-auto">
+      <div class="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
         <%= yield %>
       </div>
     </div>
