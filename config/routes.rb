@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :stocks
+  resources :stocks do
+    collection do
+      get :search
+    end
+  end
 
   # Defined Routes:
   root to: "home#index" # Same as "/"
