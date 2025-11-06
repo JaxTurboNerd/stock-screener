@@ -133,9 +133,9 @@
       <p class='text-xl text-gray-900 dark:text-white'>Annual Dividend</p>
       <div class='flex items-center gap-4'>
         <label class='text-gray-900 dark:text-white'>Greater than $:</label>
-        <input type='number' step='0.01' name='annual_dividend_min' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600' placeholder='$' />
+        <input type='number' step='0.01' name='annual_dividend_min' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600' placeholder='$' onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46 || event.charCode === 0' onpaste='event.preventDefault(); const pasted = (event.clipboardData || window.clipboardData).getData("text"); const filtered = pasted.replace(/[^0-9.]/g, ""); this.value = filtered;' oninput='this.value = this.value.replace(/[^0-9.]/g, "");' />
         <label class='text-gray-900 dark:text-white'>and less than $:</label>
-        <input type='number' step='0.01' name='annual_dividend_max' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600' placeholder='$' />
+        <input type='number' step='0.01' name='annual_dividend_max' class='p-2 border rounded-sm w-32 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600' placeholder='$' onkeypress='return (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46 || event.charCode === 0' onpaste='event.preventDefault(); const pasted = (event.clipboardData || window.clipboardData).getData("text"); const filtered = pasted.replace(/[^0-9.]/g, ""); this.value = filtered;' oninput='this.value = this.value.replace(/[^0-9.]/g, "");' />
       </div>
     </div>
   </section>
