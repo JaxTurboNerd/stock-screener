@@ -1,159 +1,140 @@
   <section class='w-full p-3 border-2 rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700'>
     <p class='text-2xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white w-full p-1'>Debt</p>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='current-ratio'>
-      <p class='text-xl text-gray-900 dark:text-white'>Current Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          current_ratio_options = [
-            ['Less than 1.0', 'lt_1_0'],
-            ['1.0 - 2.0', '1_0_2_0'],
-            ['2.0 - 3.0', '2_0_3_0'],
-            ['More than 3.0', 'gt_3_0']
-          ]
-        %>
-        <% current_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="current_ratio[]"
-              value="<%= value %>"
-              id="current-ratio-<%= i %>"
-              class="sr-only current-ratio-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='current-ratio'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Current Ratio</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            current_ratio_options = [
+              ['Less than 1.0', 'lt_1_0'],
+              ['1.0 - 2.0', '1_0_2_0'],
+              ['2.0 - 3.0', '2_0_3_0'],
+              ['More than 3.0', 'gt_3_0']
+            ]
+          %>
+          <% current_ratio_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="current_ratio[]"
+                value="<%= value %>"
+                id="current-ratio-<%= i %>"
+                class="sr-only current-ratio-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Current assets divided by current liabilities; assesses capacity to meet obligations due within a year</p>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='debt-ratio'>
-      <p class='text-xl text-gray-900 dark:text-white'>Debt Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          debt_ratio_options = [
-            ['Less than 0.3', 'lt_0_3'],
-            ['0.3 - 0.5', '0_3_0_5'],
-            ['0.5 - 0.7', '0_5_0_7'],
-            ['More than 0.7', 'gt_0_7']
-          ]
-        %>
-        <% debt_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="debt_ratio[]"
-              value="<%= value %>"
-              id="debt-ratio-<%= i %>"
-              class="sr-only debt-ratio-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='debt-ratio'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Debt Ratio</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            debt_ratio_options = [
+              ['Less than 0.3', 'lt_0_3'],
+              ['0.3 - 0.5', '0_3_0_5'],
+              ['0.5 - 0.7', '0_5_0_7'],
+              ['More than 0.7', 'gt_0_7']
+            ]
+          %>
+          <% debt_ratio_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="debt_ratio[]"
+                value="<%= value %>"
+                id="debt-ratio-<%= i %>"
+                class="sr-only debt-ratio-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Total debt divided by total assets; indicates what portion of assets is financed by creditors rather than owners, with ratios above 1 implying creditors effectively own most assets</p>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='debt-equity-ratio'>
-      <p class='text-xl text-gray-900 dark:text-white'>Debt-Equity-Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          debt_equity_ratio_options = [
-            ['Less than 1.0', 'lt_1_0'],
-            ['1.0 - 2.0', '1_0_2_0'],
-            ['2.0 - 3.0', '2_0_3_0'],
-            ['More than 3.0', 'gt_3_0']
-          ]
-        %>
-        <% debt_equity_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="debt_equity_ratio[]"
-              value="<%= value %>"
-              id="debt-equity-ratio-<%= i %>"
-              class="sr-only debt-equity-ratio-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='debt-equity-ratio'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Debt-Equity-Ratio</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            debt_equity_ratio_options = [
+              ['Less than 1.0', 'lt_1_0'],
+              ['1.0 - 2.0', '1_0_2_0'],
+              ['2.0 - 3.0', '2_0_3_0'],
+              ['More than 3.0', 'gt_3_0']
+            ]
+          %>
+          <% debt_equity_ratio_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="debt_equity_ratio[]"
+                value="<%= value %>"
+                id="debt-equity-ratio-<%= i %>"
+                class="sr-only debt-equity-ratio-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Total debt divided by shareholders' equity; higher values signal greater financial leverage and potential risk, with "comfortable" ranges varying by sector and growth stage.</p>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='debt-capital-ratio'>
-      <p class='text-xl text-gray-900 dark:text-white'>Debt/Capital Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          debt_capital_ratio_options = [
-            ['Less than 0.2', 'lt_0_2'],
-            ['0.2 - 0.5', '0_2_0_5'],
-            ['0.5 - 1.0', '0_5_1_0'],
-            ['More than 1.0', 'gt_1_0']
-          ]
-        %>
-        <% debt_capital_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="debt_capital_ratio[]"
-              value="<%= value %>"
-              id="debt-capital-ratio-<%= i %>"
-              class="sr-only debt-capital-ratio-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='interest-coverage-ratio'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Interest Coverage Ratio</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            interest_coverage_ratio_options = [
+              ['Less than 1.5', 'lt_1_5'],
+              ['1.5 - 2.5', '1_5_2_5'],
+              ['2.5 - 5.0', '2_5_5_0'],
+              ['More than 5.0', 'gt_5_0']
+            ]
+          %>
+          <% interest_coverage_ratio_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="interest_coverage_ratio[]"
+                value="<%= value %>"
+                id="interest-coverage-ratio-<%= i %>"
+                class="sr-only interest-coverage-ratio-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
-    </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='interest-coverage-ratio'>
-      <p class='text-xl text-gray-900 dark:text-white'>Interest Coverage Ratio</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          interest_coverage_ratio_options = [
-            ['Less than 1.5', 'lt_1_5'],
-            ['1.5 - 2.5', '1_5_2_5'],
-            ['2.5 - 5.0', '2_5_5_0'],
-            ['More than 5.0', 'gt_5_0']
-          ]
-        %>
-        <% interest_coverage_ratio_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="interest_coverage_ratio[]"
-              value="<%= value %>"
-              id="interest-coverage-ratio-<%= i %>"
-              class="sr-only interest-coverage-ratio-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
-      </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>EBIT or EBITDA divided by interest expense; falling coverage or low single-digit levels can flag rising default or refinancing risk</p>
     </div>
   </section>
 

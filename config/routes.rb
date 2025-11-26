@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :stocks do
     collection do
-      get :search
+      post :search
     end
   end
 

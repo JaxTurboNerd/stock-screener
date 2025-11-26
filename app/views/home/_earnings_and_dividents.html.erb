@@ -1,70 +1,76 @@
   <section class='w-full p-3 border-2 rounded-sm bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700'>
     <p class='text-2xl bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white w-full p-1'>Earnings and Dividends</p>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 border-gray-300 dark:border-gray-600' id='eps-annual-growth'>
-      <p class='text-xl text-gray-900 dark:text-white'>EPS Annual Growth</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          eps_annual_growth_options = [
-            ['0-5', '0_5'],
-            ['5-10', '5_10'],
-            ['10-15', '10_15'],
-            ['15-25', '15_25'],
-            ['25-50', '25_50'],
-            ['>50', 'gt_50']
-          ]
-        %>
-        <% eps_annual_growth_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="eps_annual_growth[]"
-              value="<%= value %>"
-              id="eps-annual-growth-<%= i %>"
-              class="sr-only eps-annual-growth-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 border-gray-300 dark:border-gray-600' id='eps-annual-growth'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>EPS Annual Growth</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            eps_annual_growth_options = [
+              ['0-5', '0_5'],
+              ['5-10', '5_10'],
+              ['10-15', '10_15'],
+              ['15-25', '15_25'],
+              ['25-50', '25_50'],
+              ['>50', 'gt_50']
+            ]
+          %>
+          <% eps_annual_growth_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="eps_annual_growth[]"
+                value="<%= value %>"
+                id="eps-annual-growth-<%= i %>"
+                class="sr-only eps-annual-growth-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Shows how fast profit per share is increasing or shrinking over time. Strong EPS growth suggests the business is becoming more profitable on a per‑share basis, which can support higher stock prices.</p>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='annual-revenue-growth'>
-      <p class='text-xl text-gray-900 dark:text-white'>Annual Revenue Growth</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          annual_revenue_growth_options = [
-            ['0-5', '0_5'],
-            ['5-10', '5_10'],
-            ['10-15', '10_15'],
-            ['15-25', '15_25'],
-            ['25-50', '25_50'],
-            ['>50', 'gt_50']
-          ]
-        %>
-        <% annual_revenue_growth_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="annual_revenue_growth[]"
-              value="<%= value %>"
-              id="annual-revenue-growth-<%= i %>"
-              class="sr-only annual-revenue-growth-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='annual-revenue-growth'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Annual Revenue Growth</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            annual_revenue_growth_options = [
+              ['0-5', '0_5'],
+              ['5-10', '5_10'],
+              ['10-15', '10_15'],
+              ['15-25', '15_25'],
+              ['25-50', '25_50'],
+              ['>50', 'gt_50']
+            ]
+          %>
+          <% annual_revenue_growth_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="annual_revenue_growth[]"
+                value="<%= value %>"
+                id="annual-revenue-growth-<%= i %>"
+                class="sr-only annual-revenue-growth-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Shows how quickly the company is expanding its top line, regardless of current profitability.</p>
     </div>
     <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='dividend-growth-5-year'>
       <p class='text-xl text-gray-900 dark:text-white'>Dividend Growth 5 Year</p>
@@ -97,37 +103,40 @@
         <% end %>
       </div>
     </div>
-    <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='dividend-yield'>
-      <p class='text-xl text-gray-900 dark:text-white'>Dividend Yield</p>
-      <div class='flex flex-wrap gap-2 mt-2'>
-        <%
-          dividend_yield_options = [
-            ['0-2', '0_2'],
-            ['2-4', '2_4'],
-            ['4-6', '4_6'],
-            ['6-8', '6_8'],
-            ['>8', 'gt_8']
-          ]
-        %>
-        <% dividend_yield_options.each_with_index do |(label, value), i| %>
-          <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
-            <input
-              type="checkbox"
-              name="dividend_yield[]"
-              value="<%= value %>"
-              id="dividend-yield-<%= i %>"
-              class="sr-only dividend-yield-checkbox"
-              onchange="
-                if (this.checked) {
-                  this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                } else {
-                  this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
-                }
-              ">
-            <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
-          </label>
-        <% end %>
+    <div class='border-1 rounded-sm p-2 mt-4 border-gray-300 dark:border-gray-600' id='dividend-yield'>
+      <div class='flex items-center gap-4'>
+        <p class='text-xl text-gray-900 dark:text-white'>Dividend Yield</p>
+        <div class='flex flex-wrap gap-2 mt-2'>
+          <%
+            dividend_yield_options = [
+              ['0-2', '0_2'],
+              ['2-4', '2_4'],
+              ['4-6', '4_6'],
+              ['6-8', '6_8'],
+              ['>8', 'gt_8']
+            ]
+          %>
+          <% dividend_yield_options.each_with_index do |(label, value), i| %>
+            <label class="inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer transition-colors bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 mr-2">
+              <input
+                type="checkbox"
+                name="dividend_yield[]"
+                value="<%= value %>"
+                id="dividend-yield-<%= i %>"
+                class="sr-only dividend-yield-checkbox"
+                onchange="
+                  if (this.checked) {
+                    this.parentElement.classList.add('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  } else {
+                    this.parentElement.classList.remove('!bg-gray-800', 'dark:!bg-blue-600', '!text-white', '!border-gray-800', 'dark:!border-blue-600');
+                  }
+                ">
+              <span class="px-2 py-1 rounded-lg transition-colors"><%= label %></span>
+            </label>
+          <% end %>
+        </div>
       </div>
+      <p class='text-sm text-gray-600 dark:text-gray-400 mt-3 w-full'>Useful for income investors.</p>
     </div>
     <div class='flex border-1 rounded-sm items-center gap-4 p-2 mt-4 border-gray-300 dark:border-gray-600' id='annual-dividend'>
       <p class='text-xl text-gray-900 dark:text-white'>Annual Dividend</p>
