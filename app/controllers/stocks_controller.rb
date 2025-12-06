@@ -129,8 +129,8 @@ class StocksController < ApplicationController
     }
   end
 
-  # This function is used to get the AAPL stock.
-  def price
+  # This function is used to get the AAPL stock. Only used for testing.
+  def get_aaple_price
     service = FinanceApiService.new
     result = service.get_price("AAPL")
 

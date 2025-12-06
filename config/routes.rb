@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   # Defined Routes:
   root to: "home#index" # Same as "/"
+  get "ai_tool", to: "ai_tools#index", as: :ai_tool
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
