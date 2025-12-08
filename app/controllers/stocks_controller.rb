@@ -4,7 +4,7 @@ class StocksController < ApplicationController
   # GET /stocks or /stocks.json
   def index
     @stocks = Stock.all
-    service = FinanceApiService.new
+    # service = FinanceApiService.new
     # @result = service.get_price("AAPL")
 
     # if @result
@@ -68,8 +68,18 @@ class StocksController < ApplicationController
   # POST /stocks/search
   def search
     screener_params = extract_screener_params
-    service = YFinanceApiService.new
-    @results = service.screen(screener_params)
+    
+    # Format and output form data to console
+    formatter = ScreenerFormatterService.new(screener_params)
+    formatted_text = formatter.format_for_llm
+    puts "\n" + "=" * 80
+    puts "FORMATTED STOCK SCREENER DATA FOR LLM:"
+    puts "=" * 80
+    puts formatted_text
+    puts "=" * 80 + "\n"
+    
+    # service = YFinanceApiService.new
+    # @results = service.screen(screener_params)
 
     respond_to do |format|
       if @results
