@@ -1,0 +1,43 @@
+<div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900'>
+  <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Portfolio Analysis</h1>
+  <div class='w-full max-w-2xl'>
+    <% if flash[:notice] %>
+      <p class="mb-6 p-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"><%= flash[:notice] %></p>
+    <% end %>
+    <% if flash[:alert] %>
+      <p class="mb-6 p-4 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"><%= flash[:alert] %></p>
+    <% end %>
+    <p class='text-lg text-gray-700 dark:text-gray-300 text-center mb-8'>
+      Analyze your portfolio performance, allocation, and risk metrics. Upload a portfolio file (e.g. CSV or spreadsheet) to get started.
+    </p>
+
+    <%= form_with url: portfolio_analysis_upload_path, method: :post, local: true, class: "w-full" do |form| %>
+      <div data-controller="file-drop-zone" class="w-full">
+        <div
+          data-file-drop-zone-target="zone"
+          data-click-browse
+          role="button"
+          tabindex="0"
+          class="flex flex-col items-center justify-center w-full min-h-[200px] px-6 py-10 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+        >
+          <svg class="w-12 h-12 mb-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          <p class="mb-1 text-lg font-medium text-gray-700 dark:text-gray-300">
+            Drop your portfolio file here, or
+            <span class="text-yellow-500 dark:text-yellow-400 underline">browse</span>
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            CSV, XLS, XLSX or other spreadsheet formats
+          </p>
+          <p data-file-drop-zone-target="fileName" class="hidden mt-3 text-sm font-medium text-gray-900 dark:text-white"></p>
+        </div>
+        <%= form.file_field :portfolio_file, data: { file_drop_zone_target: "input" }, class: "hidden", accept: ".csv,.xls,.xlsx,application/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" %>
+      </div>
+
+      <div class="flex justify-center mt-6">
+        <%= form.submit "Analyze Portfolio", class: "px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-lg font-semibold cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</div>

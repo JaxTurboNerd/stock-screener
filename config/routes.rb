@@ -6,8 +6,11 @@ Rails.application.routes.draw do
   end
 
   # Defined Routes:
-  root to: "home#index" # Same as "/"
+  root to: "portfolio_analysis#index" # Same as "/"
   get "ai_tool", to: "ai_tools#index", as: :ai_tool
+  get "portfolio_analysis", to: "portfolio_analysis#index", as: :portfolio_analysis
+  get "screener", to: "home#index", as: :screener
+  post "portfolio_analysis/upload", to: "portfolio_analysis#upload", as: :portfolio_analysis_upload
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
