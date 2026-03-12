@@ -4,8 +4,8 @@ class StocksController < ApplicationController
   # GET /stocks or /stocks.json
   def index
     @stocks = Stock.all
-    # service = FinanceApiService.new
-    # @result = service.get_price("AAPL")
+    service = FinanceApiService.new
+    @result = service.get_price("AAPL")
 
     # if @result
     #   render json: @result
