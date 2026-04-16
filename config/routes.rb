@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   root to: "portfolio_analysis#index" # Same as "/"
   get "ai_tool", to: "ai_tools#index", as: :ai_tool
   get "portfolio_analysis", to: "portfolio_analysis#index", as: :portfolio_analysis
-  get "screener", to: "home#index", as: :screener
   get  "debt_analysis",         to: "debt_analysis#index",   as: :debt_analysis
   post "debt_analysis/analyze", to: "debt_analysis#analyze", as: :debt_analysis_analyze
   post "portfolio_analysis/upload", to: "portfolio_analysis#upload", as: :portfolio_analysis_upload
