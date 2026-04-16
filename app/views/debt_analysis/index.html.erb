@@ -1,0 +1,99 @@
+<div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900 min-h-screen'>
+  <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Debt Analysis</h1>
+
+  <% if flash[:alert] %>
+    <div class='w-full max-w-md mb-6 p-4 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'>
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <%= form_with url: debt_analysis_analyze_path, method: :post, local: true,
+        data: { turbo: false, controller: "upload-form", action: "submit->upload-form#submit" },
+        class: "w-full max-w-md" do |form| %>
+
+    <label for='ticker_input' class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
+      Stock Ticker Symbol
+    </label>
+    <%= form.text_field :ticker,
+          id: "ticker_input",
+          maxlength: 5,
+          placeholder: "e.g. AAPL",
+          value: @ticker,
+          class: "w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-lg tracking-widest mb-1" %>
+    <p class='text-xs text-gray-500 dark:text-gray-400 mb-4'>Maximum 5 characters</p>
+
+    <div class="flex flex-col items-start gap-2">
+      <%= form.submit "Analyze Debt Profile",
+            data: { upload_form_target: "button" },
+            class: "px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed" %>
+      <p data-upload-form-target="status" class="hidden text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+        Contacting Perplexity AI &mdash; this may take 10&ndash;20 seconds&hellip;
+      </p>
+    </div>
+  <% end %>
+
+  <% if @analysis %>
+    <div class="w-full max-w-3xl mt-12 space-y-6">
+
+      <%# Header: company name + profitability badge %>
+      <div class="flex flex-wrap items-center gap-4">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+          <%= @analysis['company_name'] %>
+          <span class="text-gray-400 dark:text-gray-500 font-normal text-lg ml-1">(<%= @analysis['ticker'] %>)</span>
+        </h2>
+        <% if @analysis['profitable'] %>
+          <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300">
+            &#10003; Profitable
+          </span>
+        <% else %>
+          <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300">
+            &#10007; Not Profitable
+          </span>
+        <% end %>
+        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <%= @analysis['debt_rating'] %>
+        </span>
+      </div>
+
+      <p class="text-gray-600 dark:text-gray-400 italic"><%= @analysis['profitability_summary'] %></p>
+
+      <%# Metrics grid %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Key Metrics</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <% metric_labels = {
+               "net_income"       => "Net Income",
+               "profit_margin"    => "Profit Margin",
+               "return_on_equity" => "Return on Equity",
+               "return_on_assets" => "Return on Assets",
+               "total_debt"       => "Total Debt",
+               "debt_to_equity"   => "Debt / Equity",
+               "debt_to_assets"   => "Debt / Assets",
+               "current_ratio"    => "Current Ratio",
+               "interest_coverage"=> "Interest Coverage",
+               "free_cash_flow"   => "Free Cash Flow"
+             } %>
+          <% metric_labels.each do |key, label| %>
+            <div class="bg-white dark:bg-gray-700 rounded-lg p-3 shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1"><%= label %></p>
+              <p class="text-base font-semibold text-gray-900 dark:text-white">
+                <%= @analysis.dig('metrics', key) || '—' %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# AI narrative %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Analysis</h3>
+        <div class="text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+          <% @analysis['analysis'].to_s.split(/\n\n+/).each do |para| %>
+            <p><%= para.strip %></p>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
+</div>
