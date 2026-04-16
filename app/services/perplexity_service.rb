@@ -29,6 +29,19 @@ class PerplexityService
             "holdings": ["AAPL", "MSFT"]
           }
         ],
+        "concentration_alerts": [
+          {
+            "sector": "Technology",
+            "percentage": 45.2,
+            "threshold": 25.0,
+            "severity": "high"
+          }
+        ],
+        "recommendations": [
+          "Consider adding exposure to Healthcare or Consumer Defensive sectors to reduce Technology concentration.",
+          "Diversify within Technology by adding international tech ETFs.",
+          "Add bond or fixed-income ETFs to reduce overall equity concentration risk."
+        ],
         "analysis": "2-3 paragraph narrative about portfolio diversity, concentration risks, and recommendations."
       }
 
@@ -37,6 +50,8 @@ class PerplexityService
       - Percentages must sum to exactly 100
       - Values must sum to the total portfolio value
       - Every ticker must appear in exactly one sector
+      - concentration_alerts: include any sector exceeding 25% (industry standard overweight threshold). severity is "high" if >40%, "medium" if 25-40%. Return empty array [] if no sectors exceed 25%.
+      - recommendations: provide 1-3 specific, actionable recommendations to reduce concentration risk. If no alerts exist, return [] (empty array).
     PROMPT
 
     response = HTTParty.post(
