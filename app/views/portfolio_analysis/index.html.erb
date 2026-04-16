@@ -1,43 +1,135 @@
-<div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900'>
+<div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900 min-h-screen'>
   <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Portfolio Analysis</h1>
+
   <div class='w-full max-w-2xl'>
-    <% if flash[:notice] %>
-      <p class="mb-6 p-4 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"><%= flash[:notice] %></p>
-    <% end %>
     <% if flash[:alert] %>
       <p class="mb-6 p-4 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"><%= flash[:alert] %></p>
     <% end %>
-    <p class='text-lg text-gray-700 dark:text-gray-300 text-center mb-8'>
-      Analyze your portfolio performance, allocation, and risk metrics. Upload a portfolio file (e.g. CSV or spreadsheet) to get started.
-    </p>
 
-    <%= form_with url: portfolio_analysis_upload_path, method: :post, local: true, class: "w-full" do |form| %>
+    <% unless @analysis %>
+      <p class='text-lg text-gray-700 dark:text-gray-300 text-center mb-8'>
+        Upload a portfolio file to visualize sector diversity and get AI-powered insights.
+      </p>
+    <% end %>
+
+    <%= form_with url: portfolio_analysis_upload_path, method: :post, local: true, multipart: true, data: { turbo: false, controller: "upload-form", action: "submit->upload-form#submit" }, class: "w-full" do |form| %>
       <div data-controller="file-drop-zone" class="w-full">
         <div
           data-file-drop-zone-target="zone"
           data-click-browse
           role="button"
           tabindex="0"
-          class="flex flex-col items-center justify-center w-full min-h-[200px] px-6 py-10 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+          class="flex flex-col items-center justify-center w-full min-h-[160px] px-6 py-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50"
         >
-          <svg class="w-12 h-12 mb-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
           </svg>
-          <p class="mb-1 text-lg font-medium text-gray-700 dark:text-gray-300">
+          <p class="mb-1 text-base font-medium text-gray-700 dark:text-gray-300">
             Drop your portfolio file here, or
             <span class="text-yellow-500 dark:text-yellow-400 underline">browse</span>
           </p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            CSV, XLS, XLSX or other spreadsheet formats
-          </p>
-          <p data-file-drop-zone-target="fileName" class="hidden mt-3 text-sm font-medium text-gray-900 dark:text-white"></p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">CSV, XLS, XLSX</p>
+          <p data-file-drop-zone-target="fileName" class="hidden mt-3 text-sm font-medium text-yellow-500 dark:text-yellow-400"></p>
         </div>
-        <%= form.file_field :portfolio_file, data: { file_drop_zone_target: "input" }, class: "hidden", accept: ".csv,.xls,.xlsx,application/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" %>
+        <%= form.file_field :portfolio_file, data: { file_drop_zone_target: "input" }, class: "hidden", accept: ".csv,.xls,.xlsx" %>
       </div>
 
-      <div class="flex justify-center mt-6">
-        <%= form.submit "Analyze Portfolio", class: "px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-lg font-semibold cursor-pointer" %>
+      <div class="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-gray-500 dark:text-gray-400">
+        <span class="font-medium">Expected columns:</span>
+        <code class="mx-2 text-gray-700 dark:text-gray-300">Stock, Shares, Current Price</code>
+        <span class="text-gray-400 dark:text-gray-500">&mdash; e.g.</span>
+        <code class="mx-1 text-gray-700 dark:text-gray-300">AAPL, 168, 227.52</code>
+      </div>
+
+      <div class="flex flex-col items-center mt-4 gap-3">
+        <%= form.submit "Analyze Portfolio",
+            data: { upload_form_target: "button" },
+            class: "px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-lg font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed" %>
+        <p data-upload-form-target="status" class="hidden text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+          Contacting Perplexity AI — this may take 10-20 seconds&hellip;
+        </p>
       </div>
     <% end %>
   </div>
+
+  <% if @analysis %>
+    <div class="w-full max-w-5xl mt-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Analysis Results</h2>
+
+      <%# Donut chart + sector breakdown %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sector Allocation</h3>
+          <canvas
+            data-controller="portfolio-chart"
+            data-portfolio-chart-sectors-value="<%= @analysis['sectors'].to_json %>"
+            style="max-height: 320px"
+          ></canvas>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sector Breakdown</h3>
+          <div class="space-y-4">
+            <% @analysis['sectors'].sort_by { |s| -s['percentage'].to_f }.each_with_index do |sector, i| %>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-200"><%= sector['name'] %></span>
+                  <span class="text-sm text-gray-500 dark:text-gray-400"><%= sector['percentage'].to_f.round(1) %>%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-1">
+                  <div class="h-2 rounded-full" style="width: <%= [sector['percentage'].to_f, 100].min %>%; background-color: <%= chart_color(i) %>;"></div>
+                </div>
+                <p class="text-xs text-gray-400 dark:text-gray-500"><%= sector['holdings']&.join(', ') %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# AI narrative %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">AI Analysis</h3>
+        <div class="text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+          <% @analysis['analysis'].to_s.split(/\n\n+/).each do |para| %>
+            <p><%= para.strip %></p>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Holdings table %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Holdings</h3>
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            Total: $<%= number_with_precision(@total_value, precision: 2, delimiter: ',') %>
+          </span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700 text-left">
+                <th class="pb-2 text-gray-500 dark:text-gray-400 font-medium">Ticker</th>
+                <th class="pb-2 text-right text-gray-500 dark:text-gray-400 font-medium">Value</th>
+                <th class="pb-2 text-right text-gray-500 dark:text-gray-400 font-medium">% of Portfolio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @holdings.sort_by { |h| -h[:value] }.each do |holding| %>
+                <tr class="border-b border-gray-100 dark:border-gray-700/50">
+                  <td class="py-2 font-semibold text-gray-900 dark:text-white"><%= holding[:ticker] %></td>
+                  <td class="py-2 text-right text-gray-700 dark:text-gray-300">
+                    $<%= number_with_precision(holding[:value], precision: 2, delimiter: ',') %>
+                  </td>
+                  <td class="py-2 text-right text-gray-500 dark:text-gray-400">
+                    <%= number_with_precision(holding[:value] / @total_value * 100, precision: 1) %>%
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

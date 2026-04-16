@@ -1,0 +1,71 @@
+class PerplexityService
+  API_URL = "https://api.perplexity.ai/chat/completions"
+  MODEL   = "sonar-pro"
+
+  SECTOR_NAMES = [
+    "Technology", "Healthcare", "Financial Services", "Consumer Cyclical",
+    "Consumer Defensive", "Energy", "Industrials", "Materials",
+    "Real Estate", "Utilities", "Communication Services"
+  ].freeze
+
+  def analyze_portfolio(holdings)
+    total = holdings.sum { |h| h[:value] }
+    holdings_text = holdings.map { |h| "#{h[:ticker]}: $#{format('%.2f', h[:value])}" }.join("\n")
+
+    prompt = <<~PROMPT
+      You are a financial analyst. Classify each stock in this portfolio by market sector and analyze diversity.
+
+      Portfolio holdings (ticker: market value):
+      #{holdings_text}
+      Total portfolio value: $#{format('%.2f', total)}
+
+      Respond with ONLY valid JSON — no markdown fences, no extra text:
+      {
+        "sectors": [
+          {
+            "name": "Technology",
+            "percentage": 45.2,
+            "value": 25000.00,
+            "holdings": ["AAPL", "MSFT"]
+          }
+        ],
+        "analysis": "2-3 paragraph narrative about portfolio diversity, concentration risks, and recommendations."
+      }
+
+      Rules:
+      - Use only these sector names: #{SECTOR_NAMES.join(', ')}
+      - Percentages must sum to exactly 100
+      - Values must sum to the total portfolio value
+      - Every ticker must appear in exactly one sector
+    PROMPT
+
+    response = HTTParty.post(
+      API_URL,
+      headers: {
+        "Authorization" => "Bearer #{ENV['PPL_API_KEY']}",
+        "Content-Type"  => "application/json"
+      },
+      body: {
+        model: MODEL,
+        messages: [ { role: "user", content: prompt } ],
+        temperature: 0.1
+      }.to_json,
+      timeout: 30
+    )
+
+    raise "Perplexity API error (#{response.code}): #{response.message}" unless response.success?
+
+    content = response.parsed_response.dig("choices", 0, "message", "content").to_s
+    parse_json(content)
+  end
+
+  private
+
+  def parse_json(content)
+    JSON.parse(content)
+  rescue JSON::ParserError
+    match = content.match(/\{[\s\S]*\}/)
+    raise "Could not parse Perplexity response as JSON" unless match
+    JSON.parse(match[0])
+  end
+end
