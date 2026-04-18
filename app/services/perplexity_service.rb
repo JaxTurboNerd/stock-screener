@@ -74,33 +74,28 @@ class PerplexityService
     parse_json(content)
   end
 
-  def analyze_debt(ticker)
+  def analyze_debt_narrative(ticker, metrics)
+    m = metrics[:metrics]
     prompt = <<~PROMPT
-      You are a financial analyst. Analyze the debt profile and profitability of #{ticker.upcase}.
+      You are a financial analyst. Write a narrative analysis of the debt profile and profitability of #{ticker.upcase}.
+
+      Use these verified financial figures (do not contradict them):
+      - Total Debt: #{m[:total_debt]}
+      - Net Income (TTM): #{m[:net_income]}
+      - Profit Margin (TTM): #{m[:profit_margin]}
+      - Return on Equity (TTM): #{m[:return_on_equity]}
+      - Debt / Equity: #{m[:debt_to_equity]}
+      - Current Ratio (MRQ): #{m[:current_ratio]}
+      - Free Cash Flow (TTM): #{m[:free_cash_flow]}
+      - Profitable: #{metrics[:profitable]}
 
       Respond with ONLY valid JSON — no markdown fences, no extra text:
       {
         "company_name": "Full Company Name",
-        "ticker": "#{ticker.upcase}",
-        "profitable": true,
         "profitability_summary": "One sentence on whether the company is profitable and why.",
-        "metrics": {
-          "net_income": "$X.XB",
-          "profit_margin": "X.X%",
-          "return_on_equity": "X.X%",
-          "return_on_assets": "X.X%",
-          "total_debt": "$X.XB",
-          "debt_to_equity": "X.XX",
-          "debt_to_assets": "X.XX",
-          "current_ratio": "X.XX",
-          "interest_coverage": "X.Xx",
-          "free_cash_flow": "$X.XB"
-        },
         "debt_rating": "Investment Grade / Speculative / Not Rated",
         "analysis": "2-3 paragraph narrative covering debt structure, ability to service debt, profitability trends, and key risks."
       }
-
-      Use the most recent available financial data. All monetary values should include B (billions) or M (millions) suffix.
     PROMPT
 
     response = HTTParty.post(
@@ -112,7 +107,7 @@ class PerplexityService
       body: {
         model: MODEL,
         messages: [ { role: "user", content: prompt } ],
-        temperature: 0.1
+        temperature: 0.2
       }.to_json,
       timeout: 30
     )
@@ -126,10 +121,11 @@ class PerplexityService
   private
 
   def parse_json(content)
-    JSON.parse(content)
+    cleaned = content.gsub(/\A```(?:json)?\s*/i, "").gsub(/\s*```\z/, "").strip
+    JSON.parse(cleaned)
   rescue JSON::ParserError
-    match = content.match(/\{[\s\S]*\}/)
-    raise "Could not parse Perplexity response as JSON" unless match
+    match = cleaned.match(/\{[\s\S]*\}/)
+    raise "Could not parse AI response as JSON. Raw response: #{cleaned[0..300]}" unless match
     JSON.parse(match[0])
   end
 end

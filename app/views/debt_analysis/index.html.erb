@@ -55,6 +55,10 @@
         </span>
       </div>
 
+      <% if @analysis['data_period'].present? %>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">Data period: <%= @analysis['data_period'] %></p>
+      <% end %>
+
       <p class="text-gray-600 dark:text-gray-400 italic"><%= @analysis['profitability_summary'] %></p>
 
       <%# Metrics grid %>
@@ -62,15 +66,11 @@
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Key Metrics</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
           <% metric_labels = {
-               "net_income"       => "Net Income",
-               "profit_margin"    => "Profit Margin",
-               "return_on_equity" => "Return on Equity",
-               "return_on_assets" => "Return on Assets",
                "total_debt"       => "Total Debt",
+"profit_margin"    => "Profit Margin",
+               "return_on_equity" => "Return on Equity",
                "debt_to_equity"   => "Debt / Equity",
-               "debt_to_assets"   => "Debt / Assets",
                "current_ratio"    => "Current Ratio",
-               "interest_coverage"=> "Interest Coverage",
                "free_cash_flow"   => "Free Cash Flow"
              } %>
           <% metric_labels.each do |key, label| %>

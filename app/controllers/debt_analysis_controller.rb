@@ -11,7 +11,20 @@ class DebtAnalysisController < ApplicationController
     end
 
     @ticker   = ticker
-    @analysis = PerplexityService.new.analyze_debt(ticker)
+    metrics   = FmpService.new.fetch_debt_metrics(ticker)
+    narrative = PerplexityService.new.analyze_debt_narrative(ticker, metrics)
+
+    @analysis = {
+      "company_name"        => narrative["company_name"],
+      "ticker"              => ticker,
+      "profitable"          => metrics[:profitable],
+      "data_period"         => metrics[:data_period],
+      "debt_rating"         => narrative["debt_rating"],
+      "profitability_summary" => narrative["profitability_summary"],
+      "analysis"            => narrative["analysis"],
+      "metrics"             => metrics[:metrics].transform_keys(&:to_s)
+    }
+
     render :index
   rescue => e
     flash.now[:alert] = "Analysis failed: #{e.message}"
