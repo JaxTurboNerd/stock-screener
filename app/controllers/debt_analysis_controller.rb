@@ -19,7 +19,9 @@ class DebtAnalysisController < ApplicationController
       "ticker"              => ticker,
       "profitable"          => metrics[:profitable],
       "data_period"         => metrics[:data_period],
-      "debt_rating"         => narrative["debt_rating"],
+      "debt_rating"           => narrative["debt_rating"],
+      "profit_margin_rating"  => narrative["profit_margin_rating"],
+      "sector"                => narrative["sector"],
       "profitability_summary" => narrative["profitability_summary"],
       "analysis"            => narrative["analysis"],
       "metrics"             => metrics[:metrics].transform_keys(&:to_s)

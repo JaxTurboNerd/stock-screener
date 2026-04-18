@@ -94,8 +94,14 @@ class PerplexityService
         "company_name": "Full Company Name",
         "profitability_summary": "One sentence on whether the company is profitable and why.",
         "debt_rating": "Investment Grade / Speculative / Not Rated",
+        "profit_margin_rating": "good / average / bad",
+        "sector": "GICS sector name (e.g. Technology, Healthcare, Industrials)",
         "analysis": "2-3 paragraph narrative covering debt structure, ability to service debt, profitability trends, and key risks."
       }
+
+      Rules:
+      - profit_margin_rating: Rate the profit margin as "good", "average", or "bad" relative to industry peers and sector norms. Use exactly one of those three words.
+      - sector: Use the standard GICS sector name the company belongs to.
     PROMPT
 
     response = HTTParty.post(
