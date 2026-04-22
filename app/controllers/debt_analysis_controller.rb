@@ -11,8 +11,12 @@ class DebtAnalysisController < ApplicationController
     end
 
     @ticker   = ticker
-    metrics   = FmpService.new.fetch_debt_metrics(ticker)
-    narrative = PerplexityService.new.analyze_debt_narrative(ticker, metrics)
+    metrics   = Rails.cache.fetch("debt_analysis/fmp/#{ticker}", expires_in: 24.hours) do
+                  FmpService.new.fetch_debt_metrics(ticker)
+                end
+    narrative = Rails.cache.fetch("debt_analysis/perplexity/#{ticker}", expires_in: 7.days) do
+                  PerplexityService.new.analyze_debt_narrative(ticker, metrics)
+                end
 
     @analysis = {
       "company_name"        => narrative["company_name"],
