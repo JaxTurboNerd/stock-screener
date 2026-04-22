@@ -6,7 +6,7 @@
       <%= flash[:alert] %>
     </div>
   <% end %>
-
+<%# random comment %>
   <%= form_with url: debt_analysis_analyze_path, method: :post, local: true,
         data: { turbo: false, controller: "upload-form", action: "submit->upload-form#submit" },
         class: "w-full max-w-md" do |form| %>
