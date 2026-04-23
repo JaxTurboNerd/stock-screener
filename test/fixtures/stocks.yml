@@ -6,8 +6,8 @@
 #
 one:
   name: "Apple Inc."
-  ticker: "AAPL"
+  symbol: "AAPL"
 
 two:
   name: "Microsoft Corporation"
-  ticker: "MSFT"
+  symbol: "MSFT"
