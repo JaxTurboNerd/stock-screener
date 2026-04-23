@@ -100,7 +100,7 @@ class StocksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def stock_params
-    params.fetch(:stock, {})
+    params.fetch(:stock, {}).permit(:name, :symbol)
   end
 
   # Extract all screener parameters from the form
