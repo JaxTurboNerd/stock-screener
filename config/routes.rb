@@ -1,10 +1,4 @@
 Rails.application.routes.draw do
-  resources :stocks do
-    collection do
-      post :search
-    end
-  end
-
   # Defined Routes:
   root to: "portfolio_analysis#index" # Same as "/"
   get "ai_tool", to: "ai_tools#index", as: :ai_tool
