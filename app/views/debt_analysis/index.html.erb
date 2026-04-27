@@ -1,5 +1,5 @@
 <div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900 min-h-screen'>
-  <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Debt Analysis</h1>
+  <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Company Analysis</h1>
 
   <% if flash[:alert] %>
     <div class='w-full max-w-md mb-6 p-4 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'>
@@ -23,12 +23,16 @@
     <p class='text-xs text-gray-500 dark:text-gray-400 mb-4'>Maximum 5 characters</p>
 
     <div class="flex flex-col items-start gap-2">
-      <%= form.submit "Analyze Debt Profile",
+      <%= form.submit "Submit",
             data: { upload_form_target: "button" },
             class: "px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed" %>
-      <p data-upload-form-target="status" class="hidden text-sm text-gray-500 dark:text-gray-400 animate-pulse">
-        Contacting Perplexity AI &mdash; this may take 10&ndash;20 seconds&hellip;
-      </p>
+      <div data-upload-form-target="status" class="hidden items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <svg class="animate-spin h-4 w-4 text-blue-500 dark:text-blue-400 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 22 6.477 22 12h-4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="animate-pulse">Retrieving &mdash; this may take 10&ndash;20 seconds&hellip;</span>
+      </div>
     </div>
   <% end %>
 
@@ -82,80 +86,97 @@
 
       <p class="text-gray-600 dark:text-gray-400 italic"><%= @analysis['profitability_summary'] %></p>
 
-      <%# Metrics grid %>
+      <%# Shared metric data %>
+      <%
+        metric_labels = {
+          "total_debt"       => "Total Debt",
+          "profit_margin"    => "Profit Margin",
+          "return_on_equity" => "Return on Equity",
+          "debt_to_equity"   => "Debt / Equity",
+          "current_ratio"    => "Current Ratio",
+          "free_cash_flow"   => "Free Cash Flow"
+        }
+        metric_tooltips = {
+          "profit_margin"    => "How much of each dollar of revenue the company keeps as profit after all expenses, interest, and taxes. A higher margin generally indicates better cost control and pricing power.",
+          "return_on_equity" => "Profitability from the shareholders' perspective – how effectively the company uses owners' equity to generate earnings. Higher ROE (sustainably achieved) typically signals efficient use of capital.",
+          "debt_to_equity"   => "Long‑term solvency and leverage – how much the company relies on debt versus owners' equity to finance its assets. Higher levels mean more financial risk if earnings fall.",
+          "current_ratio"    => "Short‑term liquidity – whether the company has enough current assets to cover obligations due within a year. Values well below 1 can signal potential cash‑flow stress.",
+          "free_cash_flow"   => "Cash the business generates after funding operations and required capital expenditures, which can be used to pay down debt, repurchase shares, or pay dividends. Strong and growing FCF is a key sign of underlying financial health."
+        }
+
+        card_bg_map = Hash.new("bg-white dark:bg-gray-700")
+
+        card_bg_map["profit_margin"] = case @analysis["profit_margin_rating"]
+          when "good"    then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+          when "average" then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+          when "bad"     then "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+          else                "bg-white dark:bg-gray-700"
+        end
+
+        roe_str = @analysis&.dig('metrics', 'return_on_equity')
+        if roe_str.present? && roe_str != '—'
+          roe_val = roe_str.to_f
+          card_bg_map["return_on_equity"] = if roe_val >= 15.0 then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                             elsif roe_val >= 5.0  then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                             else                       "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                             end
+        end
+
+        de_str = @analysis&.dig('metrics', 'debt_to_equity')
+        if de_str.present? && de_str != '—'
+          de_val = de_str.to_f
+          card_bg_map["debt_to_equity"] = if de_val <= 1.5 then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                           elsif de_val <= 2.5 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                           else                     "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                           end
+        end
+
+        cr_str = @analysis&.dig('metrics', 'current_ratio')
+        if cr_str.present? && cr_str != '—'
+          cr_val = cr_str.to_f
+          card_bg_map["current_ratio"] = if cr_val < 1.0 then "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                          elsif cr_val < 1.5 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                          else                    "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                          end
+        end
+      %>
+
+      <%# Profitability %>
       <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Key Metrics</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Profitability</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <% metric_labels = {
-               "total_debt"       => "Total Debt",
-               "profit_margin"    => "Profit Margin",
-               "return_on_equity" => "Return on Equity",
-               "debt_to_equity"   => "Debt / Equity",
-               "current_ratio"    => "Current Ratio",
-               "free_cash_flow"   => "Free Cash Flow"
-             } %>
-          <% metric_tooltips = {
-               "profit_margin"    => "How much of each dollar of revenue the company keeps as profit after all expenses, interest, and taxes. A higher margin generally indicates better cost control and pricing power.",
-               "return_on_equity" => "Profitability from the shareholders' perspective – how effectively the company uses owners' equity to generate earnings. Higher ROE (sustainably achieved) typically signals efficient use of capital.",
-               "debt_to_equity"   => "Long‑term solvency and leverage – how much the company relies on debt versus owners' equity to finance its assets. Higher levels mean more financial risk if earnings fall.",
-               "current_ratio"    => "Short‑term liquidity – whether the company has enough current assets to cover obligations due within a year. Values well below 1 can signal potential cash‑flow stress.",
-               "free_cash_flow"   => "Cash the business generates after funding operations and required capital expenditures, which can be used to pay down debt, repurchase shares, or pay dividends. Strong and growing FCF is a key sign of underlying financial health."
-             } %>
-          <% metric_labels.each do |key, label| %>
+          <% %w[profit_margin return_on_equity free_cash_flow].each do |key| %>
+            <% label   = metric_labels[key] %>
             <% tooltip = metric_tooltips[key] %>
-            <% card_bg = if key == "profit_margin"
-                           case @analysis["profit_margin_rating"]
-                           when "good"    then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
-                           when "average" then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
-                           when "bad"     then "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
-                           else                "bg-white dark:bg-gray-700"
-                           end
-                         elsif key == "current_ratio"
-                           cr_str = @analysis&.dig('metrics', 'current_ratio')
-                           if cr_str.present? && cr_str != '—'
-                             cr_val = cr_str.to_f
-                             if cr_val < 1.0
-                               "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
-                             elsif cr_val < 1.5
-                               "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
-                             else
-                               "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
-                             end
-                           else
-                             "bg-white dark:bg-gray-700"
-                           end
-                         elsif key == "return_on_equity"
-                           roe_str = @analysis&.dig('metrics', 'return_on_equity')
-                           if roe_str.present? && roe_str != '—'
-                             roe_val = roe_str.to_f
-                             if roe_val >= 15.0
-                               "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
-                             elsif roe_val >= 5.0
-                               "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
-                             else
-                               "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
-                             end
-                           else
-                             "bg-white dark:bg-gray-700"
-                           end
-                         elsif key == "debt_to_equity"
-                           de_str = @analysis&.dig('metrics', 'debt_to_equity')
-                           if de_str.present? && de_str != '—'
-                             de_val = de_str.to_f
-                             if de_val <= 1.5
-                               "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
-                             elsif de_val <= 2.5
-                               "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
-                             else
-                               "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
-                             end
-                           else
-                             "bg-white dark:bg-gray-700"
-                           end
-                         else
-                           "bg-white dark:bg-gray-700"
-                         end %>
-            <div class="relative group <%= card_bg %> rounded-lg p-3 shadow-sm">
+            <div class="relative group <%= card_bg_map[key] %> rounded-lg p-3 shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                <%= label %>
+                <% if tooltip %>
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-[9px] font-bold leading-none cursor-default select-none">?</span>
+                <% end %>
+              </p>
+              <p class="text-base font-semibold text-gray-900 dark:text-white">
+                <%= @analysis.dig('metrics', key) || '—' %>
+              </p>
+              <% if tooltip %>
+                <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-lg bg-gray-900 dark:bg-gray-950 text-white text-xs leading-relaxed px-3 py-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10">
+                  <%= tooltip %>
+                  <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-950"></div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Debt Analysis %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Debt Analysis</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <% %w[total_debt debt_to_equity current_ratio].each do |key| %>
+            <% label   = metric_labels[key] %>
+            <% tooltip = metric_tooltips[key] %>
+            <div class="relative group <%= card_bg_map[key] %> rounded-lg p-3 shadow-sm">
               <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
                 <%= label %>
                 <% if tooltip %>
