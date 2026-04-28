@@ -2,6 +2,30 @@ class DebtAnalysisController < ApplicationController
   def index
   end
 
+  def ticker_search
+    query = params[:q].to_s.strip
+    return render json: [] if query.length < 1
+
+    results = Rails.cache.fetch("ticker_search/#{query.upcase}", expires_in: 1.hour) do
+      response = HTTParty.get(
+        "https://yahoo-finance166.p.rapidapi.com/api/autocomplete",
+        query: { query: query, region: "US" },
+        headers: {
+          "x-rapidapi-key"  => ENV.fetch("RAPIDAPI_KEY", Rails.application.credentials.dig(:rapidapi, :key)),
+          "x-rapidapi-host" => "yahoo-finance166.p.rapidapi.com"
+        }
+      )
+      if response.success?
+        quotes = response.parsed_response["quotes"] || []
+        quotes.map { |q| { symbol: q["symbol"], name: q["shortname"] || q["longname"] } }
+      else
+        []
+      end
+    end
+
+    render json: results
+  end
+
   def analyze
     ticker = params[:ticker].to_s.strip.upcase
 
