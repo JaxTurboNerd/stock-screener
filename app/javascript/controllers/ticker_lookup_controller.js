@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["input", "dropdown"]
-  static values  = { url: String, fillId: String }
+  static values  = { url: String }
 
   connect() {
     this._timer = null
@@ -21,10 +21,8 @@ export default class extends Controller {
   }
 
   select(event) {
-    const { symbol, name } = event.currentTarget.dataset
-    this.inputTarget.value = `${symbol} — ${name}`
-    const fill = document.getElementById(this.fillIdValue)
-    if (fill) fill.value = symbol
+    const { symbol } = event.currentTarget.dataset
+    this.inputTarget.value = symbol
     this._clear()
   }
 

@@ -6,39 +6,28 @@
       <%= flash[:alert] %>
     </div>
   <% end %>
-  <div class="w-full max-w-md mb-6 relative"
-       data-controller="ticker-lookup"
-       data-ticker-lookup-url-value="<%= debt_analysis_ticker_search_path %>"
-       data-ticker-lookup-fill-id-value="ticker_input">
-    <label for="ticker_lookup" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-      Stock Ticker Lookup
-    </label>
-    <input type="text" id="ticker_lookup" autocomplete="off"
-      placeholder="Search by ticker or company name…"
-      data-ticker-lookup-target="input"
-      data-action="input->ticker-lookup#search"
-      class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-base" />
-    <div data-ticker-lookup-target="dropdown"
-         class="hidden absolute z-20 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
-    </div>
-  </div>
-
   <%= form_with url: debt_analysis_analyze_path, method: :post, local: true,
         data: { turbo: false, controller: "upload-form", action: "submit->upload-form#submit" },
         class: "w-full max-w-md" do |form| %>
 
-    <label for='ticker_input' class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
-      Stock Ticker
-    </label>
-    <%= form.text_field :ticker,
-          id: "ticker_input",
-          maxlength: 5,
-          placeholder: "e.g. AAPL",
-          value: @ticker,
-          class: "w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-lg tracking-widest mb-1" %>
-    <p class='text-xs text-gray-500 dark:text-gray-400 mb-4'>Maximum 5 characters</p>
+    <div class="relative" data-controller="ticker-lookup"
+         data-ticker-lookup-url-value="<%= debt_analysis_ticker_search_path %>">
+      <label for='ticker_input' class='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'>
+        Stock Ticker
+      </label>
+      <%= form.text_field :ticker,
+            id: "ticker_input",
+            autocomplete: "off",
+            placeholder: "e.g. AAPL",
+            value: @ticker,
+            data: { "ticker-lookup-target": "input", action: "input->ticker-lookup#search" },
+            class: "w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-lg tracking-widest mb-1" %>
+      <div data-ticker-lookup-target="dropdown"
+           class="hidden absolute z-20 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden divide-y divide-gray-100 dark:divide-gray-700">
+      </div>
+    </div>
 
-    <div class="flex flex-col items-start gap-2">
+    <div class="flex flex-col items-start gap-2 mt-4">
       <%= form.submit "Submit",
             data: { upload_form_target: "button" },
             class: "px-6 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed" %>
