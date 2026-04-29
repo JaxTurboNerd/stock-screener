@@ -1,0 +1,19 @@
+<div class='flex flex-col items-center h-screen w-full p-5 bg-white dark:bg-gray-900'>
+  <p class='text-4xl text-gray-900 dark:text-white mb-8'>AI Tools</p>
+  <div class='w-full max-w-4xl'>
+    <p class='text-lg text-gray-700 dark:text-gray-300 text-center mb-6'>
+      Welcome to the AI Tools page. Use the ScreenerFormatterService to format stock screener form data into natural language for LLM APIs.
+    </p>
+    
+    <div class='bg-gray-100 dark:bg-gray-800 p-6 rounded-lg'>
+      <h3 class='text-xl font-semibold text-gray-900 dark:text-white mb-4'>Usage Example:</h3>
+      <pre class='bg-gray-900 dark:bg-gray-900 text-green-400 p-4 rounded overflow-x-auto'><code># In your controller or service:
+screener_params = extract_screener_params
+formatter = ScreenerFormatterService.new(screener_params)
+message_content = formatter.format_for_llm
+
+# Use message_content as the message content for Perplexity API</code></pre>
+    </div>
+  </div>
+</div>
+
