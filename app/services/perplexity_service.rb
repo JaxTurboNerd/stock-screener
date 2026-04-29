@@ -29,6 +29,19 @@ class PerplexityService
             "holdings": ["AAPL", "MSFT"]
           }
         ],
+        "concentration_alerts": [
+          {
+            "sector": "Technology",
+            "percentage": 45.2,
+            "threshold": 25.0,
+            "severity": "high"
+          }
+        ],
+        "recommendations": [
+          "Consider adding exposure to Healthcare or Consumer Defensive sectors to reduce Technology concentration.",
+          "Diversify within Technology by adding international tech ETFs.",
+          "Add bond or fixed-income ETFs to reduce overall equity concentration risk."
+        ],
         "analysis": "2-3 paragraph narrative about portfolio diversity, concentration risks, and recommendations."
       }
 
@@ -37,6 +50,8 @@ class PerplexityService
       - Percentages must sum to exactly 100
       - Values must sum to the total portfolio value
       - Every ticker must appear in exactly one sector
+      - concentration_alerts: include any sector exceeding 25% (industry standard overweight threshold). severity is "high" if >40%, "medium" if 25-40%. Return empty array [] if no sectors exceed 25%.
+      - recommendations: provide 1-3 specific, actionable recommendations to reduce concentration risk. If no alerts exist, return [] (empty array).
     PROMPT
 
     response = HTTParty.post(
@@ -59,33 +74,34 @@ class PerplexityService
     parse_json(content)
   end
 
-  def analyze_debt(ticker)
+  def analyze_debt_narrative(ticker, metrics)
+    m = metrics[:metrics]
     prompt = <<~PROMPT
-      You are a financial analyst. Analyze the debt profile and profitability of #{ticker.upcase}.
+      You are a financial analyst. Write a narrative analysis of the debt profile and profitability of #{ticker.upcase}.
+
+      Use these verified financial figures (do not contradict them):
+      - Total Debt: #{m[:total_debt]}
+      - Net Income (TTM): #{m[:net_income]}
+      - Profit Margin (TTM): #{m[:profit_margin]}
+      - Return on Equity (TTM): #{m[:return_on_equity]}
+      - Debt / Equity: #{m[:debt_to_equity]}
+      - Current Ratio (MRQ): #{m[:current_ratio]}
+      - Free Cash Flow (TTM): #{m[:free_cash_flow]}
+      - Profitable: #{metrics[:profitable]}
 
       Respond with ONLY valid JSON — no markdown fences, no extra text:
       {
         "company_name": "Full Company Name",
-        "ticker": "#{ticker.upcase}",
-        "profitable": true,
         "profitability_summary": "One sentence on whether the company is profitable and why.",
-        "metrics": {
-          "net_income": "$X.XB",
-          "profit_margin": "X.X%",
-          "return_on_equity": "X.X%",
-          "return_on_assets": "X.X%",
-          "total_debt": "$X.XB",
-          "debt_to_equity": "X.XX",
-          "debt_to_assets": "X.XX",
-          "current_ratio": "X.XX",
-          "interest_coverage": "X.Xx",
-          "free_cash_flow": "$X.XB"
-        },
         "debt_rating": "Investment Grade / Speculative / Not Rated",
+        "profit_margin_rating": "good / average / bad",
+        "sector": "GICS sector name (e.g. Technology, Healthcare, Industrials)",
         "analysis": "2-3 paragraph narrative covering debt structure, ability to service debt, profitability trends, and key risks."
       }
 
-      Use the most recent available financial data. All monetary values should include B (billions) or M (millions) suffix.
+      Rules:
+      - profit_margin_rating: Rate the profit margin as "good", "average", or "bad" relative to industry peers and sector norms. Use exactly one of those three words.
+      - sector: Use the standard GICS sector name the company belongs to.
     PROMPT
 
     response = HTTParty.post(
@@ -97,7 +113,7 @@ class PerplexityService
       body: {
         model: MODEL,
         messages: [ { role: "user", content: prompt } ],
-        temperature: 0.1
+        temperature: 0.2
       }.to_json,
       timeout: 30
     )
@@ -111,10 +127,11 @@ class PerplexityService
   private
 
   def parse_json(content)
-    JSON.parse(content)
+    cleaned = content.gsub(/\A```(?:json)?\s*/i, "").gsub(/\s*```\z/, "").strip
+    JSON.parse(cleaned)
   rescue JSON::ParserError
-    match = content.match(/\{[\s\S]*\}/)
-    raise "Could not parse Perplexity response as JSON" unless match
+    match = cleaned.match(/\{[\s\S]*\}/)
+    raise "Could not parse AI response as JSON. Raw response: #{cleaned[0..300]}" unless match
     JSON.parse(match[0])
   end
 end
