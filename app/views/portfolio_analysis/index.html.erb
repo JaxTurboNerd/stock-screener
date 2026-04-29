@@ -1,0 +1,143 @@
+<div class='flex flex-col items-center w-full p-5 bg-white dark:bg-gray-900 min-h-screen'>
+  <h1 class='text-4xl text-gray-900 dark:text-white mb-8'>Portfolio Analysis</h1>
+
+  <div class='w-full max-w-2xl'>
+    <% if flash[:alert] %>
+      <p class="mb-6 p-4 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"><%= flash[:alert] %></p>
+    <% end %>
+
+    <% unless @analysis %>
+      <p class='text-lg text-gray-700 dark:text-gray-300 text-center mb-8'>
+        Upload a portfolio file to visualize sector diversity and get AI-powered insights.
+      </p>
+    <% end %>
+
+    <%= form_with url: portfolio_analysis_upload_path, method: :post, local: true, multipart: true, data: { turbo: false, controller: "upload-form", action: "submit->upload-form#submit" }, class: "w-full" do |form| %>
+      <div data-controller="file-drop-zone" class="w-full">
+        <div
+          data-file-drop-zone-target="zone"
+          data-click-browse
+          role="button"
+          tabindex="0"
+          class="flex flex-col items-center justify-center w-full min-h-[160px] px-6 py-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer transition-colors hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+        >
+          <svg class="w-10 h-10 mb-3 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+          <p class="mb-1 text-base font-medium text-gray-700 dark:text-gray-300">
+            Drop your portfolio file here, or
+            <span class="text-yellow-500 dark:text-yellow-400 underline">browse</span>
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">CSV, XLS, XLSX</p>
+          <p data-file-drop-zone-target="fileName" class="hidden mt-3 text-sm font-medium text-yellow-500 dark:text-yellow-400"></p>
+        </div>
+        <%= form.file_field :portfolio_file, data: { file_drop_zone_target: "input" }, class: "hidden", accept: ".csv,.xls,.xlsx" %>
+      </div>
+
+      <div class="mt-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-gray-500 dark:text-gray-400">
+        <span class="font-medium">Expected columns:</span>
+        <code class="mx-2 text-gray-700 dark:text-gray-300">Stock, Shares, Current Price</code>
+        <span class="text-gray-400 dark:text-gray-500">&mdash; e.g.</span>
+        <code class="mx-1 text-gray-700 dark:text-gray-300">AAPL, 168, 227.52</code>
+      </div>
+
+      <div class="flex flex-col items-center mt-4 gap-3">
+        <%= form.submit "Analyze Portfolio",
+            data: { upload_form_target: "button" },
+            class: "px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors text-lg font-semibold cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed" %>
+        <p data-upload-form-target="status" class="hidden text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+          Contacting Perplexity AI — this may take 10-20 seconds&hellip;
+        </p>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @analysis %>
+    <div class="w-full max-w-5xl mt-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Analysis Results</h2>
+
+      <%# Donut chart + sector breakdown %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sector Allocation</h3>
+          <canvas
+            data-controller="portfolio-chart"
+            data-portfolio-chart-sectors-value="<%= @analysis['sectors'].to_json %>"
+            style="max-height: 320px"
+          ></canvas>
+        </div>
+
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sector Breakdown</h3>
+          <div class="space-y-4">
+            <% @analysis['sectors'].sort_by { |s| -s['percentage'].to_f }.each_with_index do |sector, i| %>
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-200"><%= sector['name'] %></span>
+                  <span class="text-sm text-gray-500 dark:text-gray-400"><%= sector['percentage'].to_f.round(1) %>%</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-1">
+                  <div class="h-2 rounded-full" style="width: <%= [sector['percentage'].to_f, 100].min %>%; background-color: <%= chart_color(i) %>;"></div>
+                </div>
+                <p class="text-xs text-gray-400 dark:text-gray-500"><%= sector['holdings']&.join(', ') %></p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Concentration alerts %>
+      <% alerts = @analysis['concentration_alerts'].to_a %>
+      <% if alerts.any? %>
+        <div class="mb-6 rounded-xl border border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/20 p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            </svg>
+            <h3 class="text-base font-semibold text-amber-800 dark:text-amber-300">Sector Concentration Warning</h3>
+          </div>
+          <% alerts.each do |alert| %>
+            <% high = alert['severity'] == 'high' %>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="inline-block px-2 py-0.5 rounded-full text-xs font-semibold <%= high ? 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300' : 'bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-300' %>">
+                <%= high ? 'High' : 'Medium' %>
+              </span>
+              <p class="text-sm text-amber-800 dark:text-amber-200">
+                <span class="font-semibold"><%= alert['sector'] %></span> is
+                <span class="font-semibold"><%= alert['percentage'].to_f.round(1) %>%</span>
+                of your portfolio — above the <%= alert['threshold'].to_f.round(0).to_i %>% industry overweight threshold.
+              </p>
+            </div>
+          <% end %>
+
+          <% recs = @analysis['recommendations'].to_a %>
+          <% if recs.any? %>
+            <div class="mt-4 border-t border-amber-200 dark:border-amber-700 pt-4">
+              <p class="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-2">Recommendations to reduce risk:</p>
+              <ul class="space-y-1">
+                <% recs.first(3).each do |rec| %>
+                  <li class="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-200">
+                    <span class="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-amber-200 dark:bg-amber-700 flex items-center justify-center text-xs font-bold text-amber-800 dark:text-amber-200">&#8594;</span>
+                    <%= rec %>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%# AI narrative %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">AI Analysis</h3>
+        <div class="text-gray-700 dark:text-gray-300 space-y-3 leading-relaxed">
+          <% @analysis['analysis'].to_s.split(/\n\n+/).each do |para| %>
+            <p><%= para.strip %></p>
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  <% end %>
+</div>
