@@ -70,4 +70,4 @@ gem "httparty", "~> 0.24.2"
 gem "dotenv-rails", groups: [ :development, :test, :production ]
 
 gem "yfinance", "~> 1.0"
-gem "roo", "~> 2.10"
+gem "roo", "~> 3.0"
