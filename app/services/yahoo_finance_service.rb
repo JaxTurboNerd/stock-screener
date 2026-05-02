@@ -1,4 +1,4 @@
-class FmpService
+class YahooFinanceService
   BASE_URL = "https://yahoo-finance166.p.rapidapi.com/api/stock/get-financial-data"
   HEADERS  = {
     "x-rapidapi-key"  => ENV["RAPIDAPI_KEY"],

@@ -1,4 +1,4 @@
-class DebtAnalysisController < ApplicationController
+class AnalysisController < ApplicationController
   def index
   end
 
@@ -35,8 +35,8 @@ class DebtAnalysisController < ApplicationController
     end
 
     @ticker   = ticker
-    metrics   = Rails.cache.fetch("debt_analysis/fmp/#{ticker}", expires_in: 24.hours) do
-                  FmpService.new.fetch_debt_metrics(ticker)
+    metrics   = Rails.cache.fetch("debt_analysis/yahoo_finance/#{ticker}", expires_in: 24.hours) do
+                  YahooFinanceService.new.fetch_debt_metrics(ticker)
                 end
     narrative = Rails.cache.fetch("debt_analysis/perplexity/#{ticker}", expires_in: 7.days) do
                   PerplexityService.new.analyze_debt_narrative(ticker, metrics)
