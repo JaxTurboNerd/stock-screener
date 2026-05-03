@@ -82,7 +82,10 @@ class PerplexityService
       Use these verified financial figures (do not contradict them):
       - Total Debt: #{m[:total_debt]}
       - Net Income (TTM): #{m[:net_income]}
-      - Profit Margin (TTM): #{m[:profit_margin]}
+      - Gross Profit Margin (TTM): #{m[:gross_profit_margin]}
+      - Operating Profit Margin (TTM): #{m[:operating_profit_margin]}
+      - Net Profit Margin (TTM): #{m[:net_profit_margin]}
+      - Cash Flow Margin (TTM): #{m[:cash_flow_margin]}
       - Return on Equity (TTM): #{m[:return_on_equity]}
       - Debt / Equity: #{m[:debt_to_equity]}
       - Current Ratio (MRQ): #{m[:current_ratio]}
@@ -94,13 +97,13 @@ class PerplexityService
         "company_name": "Full Company Name",
         "profitability_summary": "One sentence on whether the company is profitable and why.",
         "debt_rating": "Investment Grade / Speculative / Not Rated",
-        "profit_margin_rating": "good / average / bad",
+        "net_profit_margin_rating": "good / average / bad",
         "sector": "GICS sector name (e.g. Technology, Healthcare, Industrials)",
         "analysis": "2-3 paragraph narrative covering debt structure, ability to service debt, profitability trends, and key risks."
       }
 
       Rules:
-      - profit_margin_rating: Rate the profit margin as "good", "average", or "bad" relative to industry peers and sector norms. Use exactly one of those three words.
+      - net_profit_margin_rating: Rate the net profit margin as "good", "average", or "bad" relative to industry peers and sector norms. Use exactly one of those three words.
       - sector: Use the standard GICS sector name the company belongs to.
     PROMPT
 

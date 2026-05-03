@@ -25,7 +25,7 @@ class AiToolsController < ApplicationController
       # Fundamentals
       pe_ratio: params[:pe_ratio] || [],
       peg_ratio: params[:peg_ratio],
-      profit_margin: params[:profit_margin],
+      net_profit_margin: params[:net_profit_margin],
       price_sales_ratio: params[:price_sales_ratio],
       price_cash_flow: params[:price_cash_flow],
       return_on_equity: params[:return_on_equity],

@@ -110,8 +110,8 @@ class ScreenerFormatterService
       parts << "with PEG ratio #{format_peg_ratio(@params[:peg_ratio])}"
     end
 
-    if @params[:profit_margin].present?
-      parts << "with profit margin #{format_profit_margin(@params[:profit_margin])}"
+    if @params[:net_profit_margin].present?
+      parts << "with net profit margin #{format_net_profit_margin(@params[:net_profit_margin])}"
     end
 
     if @params[:price_sales_ratio].present?
@@ -209,7 +209,7 @@ class ScreenerFormatterService
     end
   end
 
-  def format_profit_margin(value)
+  def format_net_profit_margin(value)
     case value
     when "negative" then "negative"
     when "0_5" then "between 0% and 5%"

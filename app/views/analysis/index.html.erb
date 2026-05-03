@@ -95,14 +95,20 @@
       <%
         metric_labels = {
           "total_debt"       => "Total Debt",
-          "profit_margin"    => "Profit Margin",
+          "net_profit_margin"       => "Net Profit Margin",
+          "operating_profit_margin" => "Operating Profit Margin",
+          "cash_flow_margin"        => "Cash Flow Margin",
+          "gross_profit_margin" => "Gross Profit Margin",
           "return_on_equity" => "Return on Equity",
           "debt_to_equity"   => "Debt / Equity",
           "current_ratio"    => "Current Ratio",
           "free_cash_flow"   => "Free Cash Flow"
         }
         metric_tooltips = {
-          "profit_margin"    => "How much of each dollar of revenue the company keeps as profit after all expenses, interest, and taxes. A higher margin generally indicates better cost control and pricing power.",
+          "net_profit_margin"       => "How much of each dollar of revenue the company keeps as profit after all expenses, interest, and taxes. A higher margin generally indicates better cost control and pricing power.",
+          "operating_profit_margin" => "Revenue remaining after subtracting COGS and operating expenses (e.g. R&D, SG&A), before interest and taxes. Reflects how efficiently the core business converts sales into profit.",
+          "cash_flow_margin"        => "Operating cash flow as a percentage of revenue. Measures how much of each revenue dollar is converted into actual cash, serving as an earnings quality check — a margin well below net profit margin can signal aggressive accrual accounting.",
+          "gross_profit_margin" => "Revenue remaining after subtracting cost of goods sold (COGS), before operating expenses, interest, and taxes. Higher gross margin indicates pricing power and/or efficient production costs.",
           "return_on_equity" => "Profitability from the shareholders' perspective – how effectively the company uses owners' equity to generate earnings. Higher ROE (sustainably achieved) typically signals efficient use of capital.",
           "debt_to_equity"   => "Long‑term solvency and leverage – how much the company relies on debt versus owners' equity to finance its assets. Higher levels mean more financial risk if earnings fall.",
           "current_ratio"    => "Short‑term liquidity – whether the company has enough current assets to cover obligations due within a year. Values well below 1 can signal potential cash‑flow stress.",
@@ -111,7 +117,7 @@
 
         card_bg_map = Hash.new("bg-white dark:bg-gray-700")
 
-        card_bg_map["profit_margin"] = case @analysis["profit_margin_rating"]
+        card_bg_map["net_profit_margin"] = case @analysis["net_profit_margin_rating"]
           when "good"    then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
           when "average" then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
           when "bad"     then "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
@@ -150,7 +156,7 @@
       <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Profitability</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <% %w[profit_margin return_on_equity free_cash_flow].each do |key| %>
+          <% %w[gross_profit_margin net_profit_margin operating_profit_margin return_on_equity cash_flow_margin].each do |key| %>
             <% label   = metric_labels[key] %>
             <% tooltip = metric_tooltips[key] %>
             <div class="relative group <%= card_bg_map[key] %> rounded-lg p-3 shadow-sm">
@@ -178,7 +184,7 @@
       <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Debt Analysis</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <% %w[total_debt debt_to_equity current_ratio].each do |key| %>
+          <% %w[total_debt debt_to_equity current_ratio free_cash_flow].each do |key| %>
             <% label   = metric_labels[key] %>
             <% tooltip = metric_tooltips[key] %>
             <div class="relative group <%= card_bg_map[key] %> rounded-lg p-3 shadow-sm">
@@ -199,6 +205,13 @@
               <% end %>
             </div>
           <% end %>
+        </div>
+      </div>
+
+      <%# Value %>
+      <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Value</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
         </div>
       </div>
 
