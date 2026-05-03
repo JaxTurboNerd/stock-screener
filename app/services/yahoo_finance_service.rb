@@ -22,13 +22,15 @@ class YahooFinanceService
 
     total_debt    = fd.dig("totalDebt",        "raw").to_f
     revenue       = fd.dig("totalRevenue",      "raw").to_f
-    profit_margin = fd.dig("profitMargins",     "raw")
-    roe           = fd.dig("returnOnEquity",    "raw")
+    net_profit_margin = fd.dig("profitMargins",     "raw")
+    gross_margin      = fd.dig("grossMargins",      "raw")
+    operating_margin  = fd.dig("operatingMargins",  "raw")
+    roe               = fd.dig("returnOnEquity",    "raw")
     de_raw        = fd.dig("debtToEquity",      "raw")
     current_ratio = fd.dig("currentRatio",      "raw")
     fcf           = fd.dig("freeCashflow",       "raw").to_f
 
-    net_income = profit_margin && revenue > 0 ? profit_margin * revenue : fd.dig("netIncomeToCommon", "raw").to_f
+    net_income = net_profit_margin && revenue > 0 ? net_profit_margin * revenue : fd.dig("netIncomeToCommon", "raw").to_f
 
     {
       profitable:  net_income > 0,
@@ -36,7 +38,9 @@ class YahooFinanceService
       metrics: {
         total_debt:       fmt_currency(total_debt),
         net_income:       fmt_currency(net_income),
-        profit_margin:    profit_margin ? "#{(profit_margin * 100).round(2)}%" : nil,
+        net_profit_margin:   net_profit_margin ? "#{(net_profit_margin * 100).round(2)}%" : nil,
+        gross_profit_margin:     gross_margin     ? "#{(gross_margin     * 100).round(2)}%" : nil,
+        operating_profit_margin: operating_margin ? "#{(operating_margin * 100).round(2)}%" : nil,
         return_on_equity: roe           ? "#{(roe * 100).round(2)}%"           : nil,
         debt_to_equity:   de_raw        ? (de_raw / 100.0).round(2).to_s       : nil,
         current_ratio:    current_ratio ? current_ratio.round(2).to_s          : nil,

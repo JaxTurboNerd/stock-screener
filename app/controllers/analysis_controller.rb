@@ -48,7 +48,7 @@ class AnalysisController < ApplicationController
       "profitable"          => metrics[:profitable],
       "data_period"         => metrics[:data_period],
       "debt_rating"           => narrative["debt_rating"],
-      "profit_margin_rating"  => narrative["profit_margin_rating"],
+      "net_profit_margin_rating" => narrative["net_profit_margin_rating"],
       "sector"                => narrative["sector"],
       "profitability_summary" => narrative["profitability_summary"],
       "analysis"            => narrative["analysis"],
