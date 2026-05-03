@@ -85,6 +85,7 @@ class PerplexityService
       - Gross Profit Margin (TTM): #{m[:gross_profit_margin]}
       - Operating Profit Margin (TTM): #{m[:operating_profit_margin]}
       - Net Profit Margin (TTM): #{m[:net_profit_margin]}
+      - Cash Flow Margin (TTM): #{m[:cash_flow_margin]}
       - Return on Equity (TTM): #{m[:return_on_equity]}
       - Debt / Equity: #{m[:debt_to_equity]}
       - Current Ratio (MRQ): #{m[:current_ratio]}

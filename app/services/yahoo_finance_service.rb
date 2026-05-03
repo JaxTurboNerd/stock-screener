@@ -28,9 +28,11 @@ class YahooFinanceService
     roe               = fd.dig("returnOnEquity",    "raw")
     de_raw        = fd.dig("debtToEquity",      "raw")
     current_ratio = fd.dig("currentRatio",      "raw")
-    fcf           = fd.dig("freeCashflow",       "raw").to_f
+    fcf               = fd.dig("freeCashflow",       "raw").to_f
+    operating_cf      = fd.dig("operatingCashflow", "raw").to_f
 
     net_income = net_profit_margin && revenue > 0 ? net_profit_margin * revenue : fd.dig("netIncomeToCommon", "raw").to_f
+    cash_flow_margin  = revenue > 0 && operating_cf != 0 ? operating_cf / revenue : nil
 
     {
       profitable:  net_income > 0,
@@ -41,6 +43,7 @@ class YahooFinanceService
         net_profit_margin:   net_profit_margin ? "#{(net_profit_margin * 100).round(2)}%" : nil,
         gross_profit_margin:     gross_margin     ? "#{(gross_margin     * 100).round(2)}%" : nil,
         operating_profit_margin: operating_margin ? "#{(operating_margin * 100).round(2)}%" : nil,
+        cash_flow_margin:        cash_flow_margin  ? "#{(cash_flow_margin  * 100).round(2)}%" : nil,
         return_on_equity: roe           ? "#{(roe * 100).round(2)}%"           : nil,
         debt_to_equity:   de_raw        ? (de_raw / 100.0).round(2).to_s       : nil,
         current_ratio:    current_ratio ? current_ratio.round(2).to_s          : nil,
