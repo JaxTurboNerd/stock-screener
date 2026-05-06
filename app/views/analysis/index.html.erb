@@ -94,25 +94,33 @@
       <%# Shared metric data %>
       <%
         metric_labels = {
-          "total_debt"       => "Total Debt",
+          "total_debt"              => "Total Debt",
           "net_profit_margin"       => "Net Profit Margin",
           "operating_profit_margin" => "Operating Profit Margin",
           "cash_flow_margin"        => "Cash Flow Margin",
-          "gross_profit_margin" => "Gross Profit Margin",
-          "return_on_equity" => "Return on Equity",
-          "debt_to_equity"   => "Debt / Equity",
-          "current_ratio"    => "Current Ratio",
-          "free_cash_flow"   => "Free Cash Flow"
+          "gross_profit_margin"     => "Gross Profit Margin",
+          "return_on_equity"        => "Return on Equity",
+          "debt_to_equity"          => "Debt / Equity",
+          "current_ratio"           => "Current Ratio",
+          "free_cash_flow"          => "Free Cash Flow",
+          "pe_ratio"                => "P/E Ratio",
+          "peg_ratio"               => "PEG Ratio",
+          "price_to_book"           => "Price to Book",
+          "price_to_cash_flow"      => "Price to Cash Flow"
         }
         metric_tooltips = {
           "net_profit_margin"       => "How much of each dollar of revenue the company keeps as profit after all expenses, interest, and taxes. A higher margin generally indicates better cost control and pricing power.",
           "operating_profit_margin" => "Revenue remaining after subtracting COGS and operating expenses (e.g. R&D, SG&A), before interest and taxes. Reflects how efficiently the core business converts sales into profit.",
           "cash_flow_margin"        => "Operating cash flow as a percentage of revenue. Measures how much of each revenue dollar is converted into actual cash, serving as an earnings quality check — a margin well below net profit margin can signal aggressive accrual accounting.",
-          "gross_profit_margin" => "Revenue remaining after subtracting cost of goods sold (COGS), before operating expenses, interest, and taxes. Higher gross margin indicates pricing power and/or efficient production costs.",
-          "return_on_equity" => "Profitability from the shareholders' perspective – how effectively the company uses owners' equity to generate earnings. Higher ROE (sustainably achieved) typically signals efficient use of capital.",
-          "debt_to_equity"   => "Long‑term solvency and leverage – how much the company relies on debt versus owners' equity to finance its assets. Higher levels mean more financial risk if earnings fall.",
-          "current_ratio"    => "Short‑term liquidity – whether the company has enough current assets to cover obligations due within a year. Values well below 1 can signal potential cash‑flow stress.",
-          "free_cash_flow"   => "Cash the business generates after funding operations and required capital expenditures, which can be used to pay down debt, repurchase shares, or pay dividends. Strong and growing FCF is a key sign of underlying financial health."
+          "gross_profit_margin"     => "Revenue remaining after subtracting cost of goods sold (COGS), before operating expenses, interest, and taxes. Higher gross margin indicates pricing power and/or efficient production costs.",
+          "return_on_equity"        => "Profitability from the shareholders' perspective – how effectively the company uses owners' equity to generate earnings. Higher ROE (sustainably achieved) typically signals efficient use of capital.",
+          "debt_to_equity"          => "Long‑term solvency and leverage – how much the company relies on debt versus owners' equity to finance its assets. Higher levels mean more financial risk if earnings fall.",
+          "current_ratio"           => "Short‑term liquidity – whether the company has enough current assets to cover obligations due within a year. Values well below 1 can signal potential cash‑flow stress.",
+          "free_cash_flow"          => "Cash the business generates after funding operations and required capital expenditures, which can be used to pay down debt, repurchase shares, or pay dividends. Strong and growing FCF is a key sign of underlying financial health.",
+          "pe_ratio"                => "Price to Earnings — how much investors pay for each dollar of earnings. A lower PE may indicate better value, though it varies widely by sector and growth stage. Negative PE means the company is currently unprofitable.",
+          "peg_ratio"               => "Price/Earnings to Growth — the PE ratio divided by the earnings growth rate. A PEG below 1 is often considered undervalued relative to growth; above 2 may signal the stock is expensive relative to its growth prospects.",
+          "price_to_book"           => "Market price relative to book value (net assets per share). A lower P/B may suggest the stock trades near the value of its assets, though capital-light businesses (e.g. technology) often justify higher multiples.",
+          "price_to_cash_flow"      => "Market capitalization divided by operating cash flow. Measures how expensive the stock is relative to the cash it generates from operations. Lower values generally indicate better value."
         }
 
         card_bg_map = Hash.new("bg-white dark:bg-gray-700")
@@ -149,6 +157,42 @@
                                           elsif cr_val < 1.5 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
                                           else                    "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
                                           end
+        end
+
+        pe_str = @analysis&.dig('metrics', 'pe_ratio')
+        if pe_str.present? && pe_str != '—'
+          pe_val = pe_str.to_f
+          card_bg_map["pe_ratio"] = if pe_val > 0 && pe_val <= 15   then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                     elsif pe_val > 15 && pe_val <= 25 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                     else                                   "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                     end
+        end
+
+        peg_str = @analysis&.dig('metrics', 'peg_ratio')
+        if peg_str.present? && peg_str != '—'
+          peg_val = peg_str.to_f
+          card_bg_map["peg_ratio"] = if peg_val > 0 && peg_val < 1.0    then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                      elsif peg_val >= 1.0 && peg_val <= 2.0 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                      else                                        "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                      end
+        end
+
+        pb_str = @analysis&.dig('metrics', 'price_to_book')
+        if pb_str.present? && pb_str != '—'
+          pb_val = pb_str.to_f
+          card_bg_map["price_to_book"] = if pb_val <= 1.5   then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                          elsif pb_val <= 3.0 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                          else                     "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                          end
+        end
+
+        pcf_str = @analysis&.dig('metrics', 'price_to_cash_flow')
+        if pcf_str.present? && pcf_str != '—'
+          pcf_val = pcf_str.to_f
+          card_bg_map["price_to_cash_flow"] = if pcf_val > 0 && pcf_val <= 10   then "bg-green-50 dark:bg-green-900/30 ring-1 ring-green-200 dark:ring-green-800"
+                                               elsif pcf_val > 10 && pcf_val <= 20 then "bg-amber-50 dark:bg-amber-900/30 ring-1 ring-amber-200 dark:ring-amber-700"
+                                               else                                      "bg-red-50 dark:bg-red-900/30 ring-1 ring-red-200 dark:ring-red-800"
+                                               end
         end
       %>
 
@@ -212,6 +256,27 @@
       <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Value</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <% %w[pe_ratio peg_ratio price_to_book price_to_cash_flow].each do |key| %>
+            <% label   = metric_labels[key] %>
+            <% tooltip = metric_tooltips[key] %>
+            <div class="relative group <%= card_bg_map[key] %> rounded-lg p-3 shadow-sm">
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                <%= label %>
+                <% if tooltip %>
+                  <span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-[9px] font-bold leading-none cursor-default select-none">?</span>
+                <% end %>
+              </p>
+              <p class="text-base font-semibold text-gray-900 dark:text-white">
+                <%= @analysis.dig('metrics', key) || '—' %>
+              </p>
+              <% if tooltip %>
+                <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 rounded-lg bg-gray-900 dark:bg-gray-950 text-white text-xs leading-relaxed px-3 py-2 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-10">
+                  <%= tooltip %>
+                  <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-950"></div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
 

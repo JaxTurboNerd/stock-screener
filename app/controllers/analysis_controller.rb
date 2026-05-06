@@ -35,7 +35,7 @@ class AnalysisController < ApplicationController
     end
 
     @ticker   = ticker
-    metrics   = Rails.cache.fetch("debt_analysis/yahoo_finance/#{ticker}", expires_in: 24.hours) do
+    metrics   = Rails.cache.fetch("debt_analysis/yahoo_finance/v3/#{ticker}", expires_in: 24.hours) do
                   YahooFinanceService.new.fetch_debt_metrics(ticker)
                 end
     narrative = Rails.cache.fetch("debt_analysis/perplexity/#{ticker}", expires_in: 7.days) do
